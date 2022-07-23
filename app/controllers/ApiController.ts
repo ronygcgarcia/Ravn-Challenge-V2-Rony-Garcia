@@ -80,4 +80,16 @@ export default class ApiController {
 
         return res.status(HttpCode.HTTP_OK).json(response);
     }
+
+    static async logout(req: Request, res: Response) {
+        await prisma.user.update({
+            where: {
+                id: req.user.id
+            },
+            data: {
+                token_valid_after: moment().tz('America/El_Salvador').format(),
+            }
+        });
+        return res.status(HttpCode.HTTP_OK).send();
+    }
 }
