@@ -1,6 +1,7 @@
 import express, {Express, Request, Response} from 'express';
 import { createServer, Server } from 'http';
 import corsConfig from './cors';
+import cors from 'cors'
 
 
 class MainServer {
@@ -18,12 +19,9 @@ class MainServer {
   }
 
   middlewares() {
-    /*this.app.use(fileupload({
-      createParentPath: true,
-    }));
     this.app.use(cors(corsConfig));
     this.app.use(express.static('public'));
-    this.app.use(express.json());*/
+    this.app.use(express.json());
   }
 
   start() {
