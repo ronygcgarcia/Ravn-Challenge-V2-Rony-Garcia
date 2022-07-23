@@ -32,25 +32,26 @@ model Profile {
 	@@map("profiles")
 }
 model ProfileRole {
-	id Int @id @default(autoincrement())
 	profile Profile @relation(name: "ProfileToProfileRole", fields: [profile_id], references: [id])
 	role Role @relation(name: "ProfileRoleToRole", fields: [role_id], references: [id])
 	profile_id Int 
 	role_id Int 
 	@@map("profiles_roles")
+	@@id([profile_id, role_id])
 }
 model UserProfile {
-	id Int @id @default(autoincrement())
 	profile Profile @relation(name: "ProfileToUserProfile", fields: [profile_id], references: [id])
 	user User @relation(name: "UserToUserProfile", fields: [user_id], references: [id])
 	profile_id Int 
 	user_id Int 
 	@@map("users_profiles")
+	@@id([profile_id, user_id])
 }
 model RefreshToken {
 	id Int @id @default(autoincrement())
 	token String 
 	user User @relation(name: "RefreshTokenToUser", fields: [user_id], references: [id])
 	user_id Int 
+	valid DateTime 
 	@@map("refresh_token")
 }
