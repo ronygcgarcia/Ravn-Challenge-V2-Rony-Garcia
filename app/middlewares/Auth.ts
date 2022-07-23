@@ -1,17 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import NoAuthException from '../../handlers/NoAuthException';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '.prisma/client';
+import { PrismaClient } from '@prisma/client';
+import moment from 'moment';
+import NoAuthException from '../../handlers/NoAuthException';
 import Token from '../interfaces/Token';
 import Handler from '../../handlers/Handler';
-import moment from 'moment';
 import User from '../interfaces/User';
+
 const prisma = new PrismaClient();
 
-const Auth = async(req: Request, res: Response, next: NextFunction) => {
-    try{
+const Auth = async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const { authorization } = req.headers;
-        
+
         if (!authorization) throw new NoAuthException();
 
         const token = authorization.replace('Bearer ', '');
@@ -25,17 +26,17 @@ const Auth = async(req: Request, res: Response, next: NextFunction) => {
             }
         })
 
-        if(!validUser) throw new NoAuthException('Invalid credentials');
+        if (!validUser) throw new NoAuthException('Invalid credentials');
 
         const tokenValidAfter = moment(validUser.token_valid_after).tz('America/El_Salvador').valueOf();
-        
-        if(tokenValidAfter > tokenCreatedAt) throw new NoAuthException();
-      
+
+        if (tokenValidAfter > tokenCreatedAt) throw new NoAuthException();
+
         req.user = validUser as User;
 
         next();
     }
-    catch (err){
+    catch (err) {
         Handler.handle(err, req, res, next);
     }
 }

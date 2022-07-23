@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import swaggerUiExpress from 'swagger-ui-express';
 import YAML from 'yamljs'
-import path, { dirname } from 'path';
+import path from 'path';
 
 const swaggerDocumentPublic = YAML.load(path.join(__dirname, '../app/docs/index.yaml'));
 
