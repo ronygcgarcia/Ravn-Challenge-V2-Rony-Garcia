@@ -7,7 +7,7 @@
         "build": "npx tsc",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node dist/index.js",
-        "dev": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+        "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
         "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml"
     },
     "repository": {
