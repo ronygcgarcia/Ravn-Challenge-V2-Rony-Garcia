@@ -1,10 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-import moment from "moment";
-import bcrypt from "bcryptjs";
-import { Request, Response } from "express";
-import HttpCode from "../../configs/httpCode";
-import NoAuthException from "../../handlers/NoAuthException";
-import Auth from "../utils/Auth";
+import { PrismaClient } from '@prisma/client';
+import moment from 'moment';
+import bcrypt from 'bcryptjs';
+import { Request, Response } from 'express';
+import HttpCode from '../../configs/httpCode';
+import NoAuthException from '../../handlers/NoAuthException';
+import Auth from '../utils/Auth';
+
 const prisma = new PrismaClient();
 
 export default class ApiController {
@@ -17,11 +18,11 @@ export default class ApiController {
             },
         });
 
-        if (!user) throw new NoAuthException("Invalid credentials");
-        if (user.is_suspended) throw new NoAuthException("The user is suspended");
+        if (!user) throw new NoAuthException('Invalid credentials');
+        if (user.is_suspended) throw new NoAuthException('The user is suspended');
 
         const validPassword = bcrypt.compareSync(password, user.password);
-        if (!validPassword) throw new NoAuthException("Invalid credentials");
+        if (!validPassword) throw new NoAuthException('Invalid credentials');
 
         await prisma.user.update({
             where: {
@@ -61,18 +62,14 @@ export default class ApiController {
             },
         });
 
-        const roles = userProfiles?.UserProfile.map((userProfile) => {
-            return userProfile.profile?.ProfileRole.map((profileRole) => {
-                return profileRole.role.name;
-            });
-        });
+        const roles = userProfiles?.UserProfile.map((userProfile) => userProfile.profile?.ProfileRole.map((profileRole) => profileRole.role.name));
 
         const token = {
             user: userInfo,
             roles: roles?.flat(2),
         };
 
-        const secretKey: string = process.env.SECRET_KEY || "";
+        const secretKey: string = process.env.SECRET_KEY || '';
         const response = {
             token: await Auth.createToken(token, secretKey),
             refresh_token: await Auth.refreshToken(user),
@@ -84,11 +81,11 @@ export default class ApiController {
     static async logout(req: Request, res: Response) {
         await prisma.user.update({
             where: {
-                id: req.user.id
+                id: req.user.id,
             },
             data: {
                 token_valid_after: moment().tz('America/El_Salvador').format(),
-            }
+            },
         });
         return res.status(HttpCode.HTTP_OK).send();
     }

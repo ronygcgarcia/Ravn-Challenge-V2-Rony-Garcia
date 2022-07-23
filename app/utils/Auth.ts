@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
 import { PrismaClient } from '@prisma/client';
 import User from '../interfaces/User';
+
 const prisma = new PrismaClient();
 
 export default class Auth {

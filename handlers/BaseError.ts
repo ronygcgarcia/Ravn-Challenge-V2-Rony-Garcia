@@ -1,7 +1,10 @@
 export default class BaseError extends Error {
   name: string;
+
   description: string;
+
   statusCode: number;
+
   constructor(name: string, statusCode: number, description: string) {
     super(description);
 
