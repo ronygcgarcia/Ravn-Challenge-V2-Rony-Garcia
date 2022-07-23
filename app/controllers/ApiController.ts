@@ -79,4 +79,19 @@ export default class ApiController {
 
         return res.status(HttpCode.HTTP_OK).json(response);
     }
+
+    static async logout(req:Request, res: Response){}
+    static async signin(req:Request, res: Response){}
+    static async createProduct(req:Request, res: Response){}
+    static async getProducts(req:Request, res: Response){}
+    static async getProduct(req:Request, res: Response){}
+    static async updateProduct(req:Request, res: Response){}
+    static async deleteProduct(req:Request, res: Response){}
+    static async disableProduct(req:Request, res: Response){}
+    static async reactToProduct(req:Request, res: Response){}
+    static async getAllOrders(req:Request, res: Response){}
+    static async getOrder(req:Request, res: Response){}
+    static async addToCart(req:Request, res: Response){}
+    static async getCart(req:Request, res: Response){}
+    static async buyOrder(req:Request, res: Response){}
 }
