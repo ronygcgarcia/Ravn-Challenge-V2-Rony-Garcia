@@ -18,9 +18,8 @@
                 properties:
                   token:
                     type: string
-                  metodos_autenticacion:
-                    type: array
-                    items:
+                  refresh_token:
+                    type: string
       400:
         description: Bad Request
         content: {}
