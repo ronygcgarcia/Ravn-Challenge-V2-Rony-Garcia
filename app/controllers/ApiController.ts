@@ -29,6 +29,7 @@ export default class ApiController {
             },
             data: {
                 last_login: moment().format(),
+                token_valid_after: moment().tz('America/El_Salvador').format(),
             },
         });
 
@@ -36,6 +37,7 @@ export default class ApiController {
             id: user.id,
             email: user.email,
             last_login: user.last_login,
+            token_valid_after: user.token_valid_after,
         };
 
         const userProfiles = await prisma.user.findUnique({
