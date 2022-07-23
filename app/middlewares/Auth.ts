@@ -27,7 +27,7 @@ const Auth = async(req: Request, res: Response, next: NextFunction) => {
 
         if(!validUser) throw new NoAuthException('Invalid credentials');
 
-        const tokenValidAfter = moment(user.token_valid_after).tz('America/El_Salvador').valueOf();
+        const tokenValidAfter = moment(validUser.token_valid_after).tz('America/El_Salvador').valueOf();
         
         if(tokenValidAfter > tokenCreatedAt) throw new NoAuthException();
       
