@@ -274,4 +274,45 @@ export default class ProductController {
 
         return product;
     }
+
+    static async setReaction(req: Request, res: Response) {
+        const { reaction_type_id: reactionTypeId } = req.body;
+        const { product_id: productId } = req.params;
+
+        await ProductController.productExist(Number(productId));
+
+        const reactionType = await prisma.reactionType.findUnique({
+            where: {
+                id: reactionTypeId
+            }
+        });
+        if (!reactionType) throw new NotFoundException('reaction type not found')
+
+        let reaction = await prisma.reaction.findFirst({
+            where: {
+                user_id: req.user.id,
+                product_id: Number(productId)
+            }
+        });
+        if (!reaction) {
+            reaction = await prisma.reaction.create({
+                data: {
+                    user_id: req.user.id,
+                    product_id: Number(productId),
+                    reaction_type_id: reactionTypeId
+                }
+            });
+        }
+
+        reaction = await prisma.reaction.update({
+            where: {
+                id: reaction.id
+            },
+            data: {
+                reaction_type_id: reactionTypeId
+            }
+        });
+
+        return res.status(HttpCode.HTTP_OK).send();
+    }
 }

@@ -18,5 +18,6 @@ router.patch('/:product_id', [auth, validation(productSetStatusSchema)], Call(Pr
 router.put('/:product_id/image', [auth], Call(ProductController.uploadImage));
 router.post('/:product_id/cart', [auth, validation(addCartSchema)], Call(ProductController.addCart));
 router.delete('/:product_id/cart', [auth, validation(addCartSchema)], Call(ProductController.removeCart));
+router.post('/:product_id/reaction', [auth], Call(ProductController.setReaction));
 
 export default router;
