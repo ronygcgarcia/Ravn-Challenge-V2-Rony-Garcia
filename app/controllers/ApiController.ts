@@ -5,6 +5,8 @@ import { Request, Response } from 'express';
 import HttpCode from '../../configs/httpCode';
 import NoAuthException from '../../handlers/NoAuthException';
 import Auth from '../utils/Auth';
+import Mailer from '../services/Mailer';
+import BadRequestException from '../../handlers/BadRequestException';
 
 const prisma = new PrismaClient();
 
@@ -88,5 +90,77 @@ export default class ApiController {
             },
         });
         return res.status(HttpCode.HTTP_OK).send();
+    }
+
+    static async signup(req: Request, res: Response) {
+        const { email, password }: { email: string, password: string } = req.body;
+        const salt = bcrypt.genSaltSync();
+        const passwordCrypt = bcrypt.hashSync(password, salt);
+
+        const validEmail = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        });
+
+        if (validEmail) throw new BadRequestException('This email has been taken');
+        // eslint-disable-next-line no-useless-catch
+        try {
+            const [user] = await prisma.$transaction([
+                prisma.user.create({
+                    data: {
+                        email,
+                        password: passwordCrypt,
+                        is_suspended: false,
+                        verified: false
+                    }
+                })
+            ]);
+
+            const secretKey: string = process.env.SECRET_KEY || '';
+            const token = await Auth.createToken({ user: user.id }, secretKey);
+
+            const header = [
+                {
+                    tagName: 'mj-button',
+                    attributes: {
+                        width: '80%',
+                        padding: '5px 10px',
+                        'font-size': '20px',
+                        'background-color': '#d58737',
+                        'border-radius': '99px',
+                    },
+                    content: `Hello ${user.email}`,
+                },
+            ];
+
+            const body = [
+                {
+                    tagName: 'mj-button',
+                    attributes: {
+                        width: '80%',
+                        padding: '5px 10px',
+                        'font-size': '20px',
+                        'background-color': '#d58737',
+                        href: `${process.env.MAIL_MESSAGE_HOST}/api/v1/verificar/${token}`,
+                    },
+                    content: 'VERIFY MY ACCOUNT',
+                },
+            ];
+
+            await Mailer.sendEmail(
+                {
+                    email: user.email,
+                    header,
+                    subject: 'Email verification',
+                    message: 'To verify your account you have to click in the following link: ',
+                    body,
+                },
+            );
+            return res.status(HttpCode.HTTP_CREATED).json(user);
+        }
+        catch (e) {
+            throw e
+        }
     }
 }
