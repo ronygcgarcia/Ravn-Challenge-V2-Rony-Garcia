@@ -6,5 +6,6 @@ import auth from '../../app/middlewares/Auth';
 const router = Router();
 router.get('/', [auth], Call(OrderController.index));
 router.get('/:order_id', [auth], Call(OrderController.show));
+router.post('/', [auth], Call(OrderController.store));
 
 export default router;

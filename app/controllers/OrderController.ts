@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
+import moment from 'moment';
 import HttpCode from '../../configs/httpCode';
 import NotFoundException from '../../handlers/NotFoundException';
+import IProductCart from '../interfaces/IProductCart';
 import Security from '../services/Security';
 import ValidateParams from '../utils/ValidateParams';
 
@@ -66,6 +68,48 @@ export default class OrderController {
 
         const order = await OrderController.orderExist(Number(orderId), req.user.id);
 
+        return res.status(HttpCode.HTTP_OK).json(order);
+    }
+
+    static async store(req: Request, res: Response) {
+        const { address, phone } = req.body;
+        const cart = await prisma.cart.findFirst({
+            where: {
+                user_id: req.user.id
+            },
+            include: {
+                ProductCart: {
+                    include: {
+                        product: true
+                    }
+                }
+            }
+        });
+        if (!cart) throw new NotFoundException('cart not found');
+        const total = cart?.ProductCart.reduce((acumulator: number, value: IProductCart) => acumulator + value.product.price * value.quantity, 0);
+        const orderDetails = cart?.ProductCart.map((detail) => ({
+            product_id: detail.product_id,
+            quantity: detail.quantity
+        }));
+
+        const order = await prisma.order.create({
+            data: {
+                order_date: moment().format(),
+                total: Number(total),
+                user_id: req.user.id,
+                address,
+                phone,
+                OrderDetail: {
+                    create: orderDetails,
+                }
+            }
+        });
+
+        await prisma.productCart.deleteMany({
+            where: {
+                cart_id: cart.id
+            }
+        })
         return res.status(HttpCode.HTTP_OK).json(order);
     }
 
