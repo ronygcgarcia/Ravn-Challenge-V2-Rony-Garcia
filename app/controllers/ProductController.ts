@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import HttpCode from '../../configs/httpCode';
+import BadRequestException from '../../handlers/BadRequestException';
 import NotFoundException from '../../handlers/NotFoundException';
 import ValidateParams from '../utils/ValidateParams';
 
@@ -73,5 +74,27 @@ export default class ProductController {
         if (!product) throw new NotFoundException('Product not found');
 
         return res.status(HttpCode.HTTP_OK).json(product);
+    }
+
+    static async store(req: Request, res: Response) {
+        const { name, price, quantity, category_id: categoryId } = req.body;
+
+        const category = await prisma.category.findUnique({
+            where: {
+                id: Number(categoryId)
+            },
+        });
+        if (!category) throw new BadRequestException('category not found');
+
+        const product = await prisma.product.create({
+            data: {
+                name,
+                price: Number(price),
+                quantity,
+                category_id: Number(categoryId)
+            }
+        });
+
+        return res.status(HttpCode.HTTP_CREATED).json(product);
     }
 }
