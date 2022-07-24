@@ -6,7 +6,8 @@ function validation(schema: Joi.ObjectSchema) {
     // eslint-disable-next-line consistent-return
     return (req: Request, res: Response, next: NextFunction) => {
         const { error } = schema.validate(req.body, {
-            abortEarly: false
+            abortEarly: false,
+            convert: false,
         });
         if (error) {
             return res.status(HttpCode.HTTP_BAD_REQUEST).json(error.details);

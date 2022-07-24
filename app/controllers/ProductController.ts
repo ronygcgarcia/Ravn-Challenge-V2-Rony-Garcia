@@ -164,4 +164,31 @@ export default class ProductController {
             message: 'Product has been deleted successfully'
         });
     }
+
+    static async setStatus(req: Request, res: Response) {
+        const { active } = req.body;
+        const { product_id: productId } = req.params;
+
+        await ValidateParams.isValid(productId, 'The parameter must be a number');
+
+        const productExist = await prisma.product.findUnique({
+            where: {
+                id: Number(productId)
+            }
+        });
+
+        if (!productExist) throw new NotFoundException('product not found');
+        await prisma.product.update({
+            where: {
+                id: Number(productId)
+            },
+            data: {
+                active
+            },
+        });
+
+        return res.status(HttpCode.HTTP_OK).json({
+            message: `The product has been ${active ? 'enabled' : 'disabled'} successfully`
+        });
+    }
 }
