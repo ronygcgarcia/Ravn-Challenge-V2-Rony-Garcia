@@ -1,6 +1,6 @@
-import User from "./User"
+import User from "./IUser"
 
-export default interface Token {
+export default interface IToken {
     user: User;
     roles: string[];
     iat: number;

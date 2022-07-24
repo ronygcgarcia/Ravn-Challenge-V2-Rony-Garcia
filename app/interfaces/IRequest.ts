@@ -1,5 +1,5 @@
 
-import User from './User';
+import User from './IUser';
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
