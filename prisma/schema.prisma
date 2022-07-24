@@ -115,6 +115,7 @@ model Product {
 }
 
 model Reaction {
+    id               Int          @id @default(autoincrement())
     user_id          Int
     user             User         @relation(fields: [user_id], references: [id])
     reaction_type_id Int
@@ -122,7 +123,6 @@ model Reaction {
     product          Product      @relation(fields: [product_id], references: [id])
     product_id       Int
 
-    @@id([user_id, product_id])
     @@map("reactions")
 }
 
@@ -136,13 +136,13 @@ model Cart {
 }
 
 model ProductCart {
+    id         Int     @id @default(autoincrement())
     cart_id    Int
     cart       Cart    @relation(fields: [cart_id], references: [id])
     product_id Int
     product    Product @relation(fields: [product_id], references: [id])
     quantity   Int
 
-    @@id([cart_id, product_id])
     @@map("products_carts")
 }
 
