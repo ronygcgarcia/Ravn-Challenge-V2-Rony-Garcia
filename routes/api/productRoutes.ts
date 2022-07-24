@@ -14,5 +14,6 @@ router.post('/', [auth, validation(productCreateSchema)], Call(ProductController
 router.put('/:product_id', [auth, validation(productUpdateSchema)], Call(ProductController.update));
 router.delete('/:product_id', [auth], Call(ProductController.delete));
 router.patch('/:product_id', [auth, validation(productSetStatusSchema)], Call(ProductController.setStatus));
+router.put('/:product_id/image', [auth], Call(ProductController.uploadImage));
 
 export default router;
