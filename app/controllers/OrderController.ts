@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import HttpCode from '../../configs/httpCode';
+import NotFoundException from '../../handlers/NotFoundException';
 import ValidateParams from '../utils/ValidateParams';
 
 const prisma = new PrismaClient();
@@ -54,5 +55,35 @@ export default class OrderController {
         }
 
         return res.status(HttpCode.HTTP_OK).json(orders);
+    }
+
+    static async show(req: Request, res: Response) {
+        const { order_id: orderId } = req.params;
+
+        const order = await OrderController.orderExist(Number(orderId));
+
+        return res.status(HttpCode.HTTP_OK).json(order);
+    }
+
+    static async orderExist(orderId: number) {
+        const order = await prisma.order.findUnique({
+            where: {
+                id: Number(orderId)
+            },
+            include: {
+                OrderDetail: {
+                    include: {
+                        product: {
+                            include: {
+                                ProductImages: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        if (!order) throw new NotFoundException('order not found');
+
+        return order;
     }
 }
