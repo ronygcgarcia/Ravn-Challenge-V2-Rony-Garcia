@@ -141,4 +141,27 @@ export default class ProductController {
 
         return res.status(HttpCode.HTTP_OK).json(updatedProduct);
     }
+
+    static async delete(req: Request, res: Response) {
+        const { product_id: productId } = req.params;
+
+        await ValidateParams.isValid(productId, 'The parameter must be a number');
+
+        const product = await prisma.product.findUnique({
+            where: {
+                id: Number(productId)
+            }
+        });
+        if (!product) throw new NotFoundException('product not found');
+
+        await prisma.product.delete({
+            where: {
+                id: Number(productId),
+            }
+        });
+
+        return res.status(HttpCode.HTTP_OK).json({
+            message: 'Product has been deleted successfully'
+        });
+    }
 }
