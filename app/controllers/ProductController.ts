@@ -198,6 +198,72 @@ export default class ProductController {
         });
     }
 
+    static async addCart(req: Request, res: Response) {
+        const { product_id: productId } = req.body;
+        await ProductController.productExist(productId);
+
+        let cart = await prisma.cart.findFirst({
+            where: {
+                user_id: req.user.id
+            }
+        });
+
+        if (!cart) {
+            cart = await prisma.cart.create({
+                data: {
+                    user_id: req.user.id
+                }
+            });
+        }
+
+        cart = await prisma.cart.update({
+            where: {
+                id: cart.id
+            },
+            data: {
+                ProductCart: {
+                    create: {
+                        product_id: Number(productId)
+                    }
+                }
+            }
+        });
+
+        return res.status(HttpCode.HTTP_CREATED).json({
+            message: 'Product added to cart'
+        });
+    }
+
+    static async removeCart(req: Request, res: Response) {
+        const { product_id: productId } = req.body;
+        await ProductController.productExist(productId);
+
+        const cart = await prisma.cart.findFirst({
+            where: {
+                user_id: req.user.id
+            }
+        });
+        if (!cart) throw new BadRequestException('There is nothing to remove');
+
+        const productCart = await prisma.productCart.findFirst({
+            where: {
+                cart_id: cart.id,
+                product_id: productId
+            }
+        });
+        if (!productCart) throw new BadRequestException('The product is not in the cart');
+
+        await prisma.productCart.delete({
+            where: {
+                cart_id_product_id: { cart_id: cart.id, product_id: productId }
+            }
+        });
+
+        return res.status(HttpCode.HTTP_OK).json({
+            message: 'Product was removed'
+        });
+    }
+
     static async productExist(productId: number) {
         const product = await prisma.product.findUnique({
             where: {
