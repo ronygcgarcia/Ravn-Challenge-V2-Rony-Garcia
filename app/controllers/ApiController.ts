@@ -2,11 +2,14 @@ import { PrismaClient } from '@prisma/client';
 import moment from 'moment';
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import HttpCode from '../../configs/httpCode';
 import NoAuthException from '../../handlers/NoAuthException';
 import Auth from '../utils/Auth';
 import Mailer from '../services/Mailer';
 import BadRequestException from '../../handlers/BadRequestException';
+import Token from '../interfaces/IToken';
+import User from '../interfaces/IUser';
 
 const prisma = new PrismaClient();
 
@@ -22,6 +25,10 @@ export default class ApiController {
 
         if (!user) throw new NoAuthException('Invalid credentials');
         if (user.is_suspended) throw new NoAuthException('The user is suspended');
+        if (!user.verified) {
+            await ApiController.sendVerificationEmail(user);
+            throw new NoAuthException('User not verified');
+        }
 
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword) throw new NoAuthException('Invalid credentials');
@@ -117,50 +124,85 @@ export default class ApiController {
                 })
             ]);
 
-            const secretKey: string = process.env.SECRET_KEY || '';
-            const token = await Auth.createToken({ user: user.id }, secretKey);
+            await ApiController.sendVerificationEmail(user);
 
-            const header = [
-                {
-                    tagName: 'mj-button',
-                    attributes: {
-                        width: '80%',
-                        padding: '5px 10px',
-                        'font-size': '20px',
-                        'background-color': '#d58737',
-                        'border-radius': '99px',
-                    },
-                    content: `Hello ${user.email}`,
-                },
-            ];
-
-            const body = [
-                {
-                    tagName: 'mj-button',
-                    attributes: {
-                        width: '80%',
-                        padding: '5px 10px',
-                        'font-size': '20px',
-                        'background-color': '#d58737',
-                        href: `${process.env.MAIL_MESSAGE_HOST}/api/v1/verificar/${token}`,
-                    },
-                    content: 'VERIFY MY ACCOUNT',
-                },
-            ];
-
-            await Mailer.sendEmail(
-                {
-                    email: user.email,
-                    header,
-                    subject: 'Email verification',
-                    message: 'To verify your account you have to click in the following link: ',
-                    body,
-                },
-            );
             return res.status(HttpCode.HTTP_CREATED).json(user);
         }
         catch (e) {
             throw e
         }
+    }
+
+    static async confirmUser(req: Request, res: Response) {
+        const { token } = req.params;
+        if (token) {
+            const { user } = jwt.verify(token, process.env.SECRET_KEY as string) as Token;
+
+            const confirmToUser = await prisma.user.findUnique({
+                where: {
+                    id: Number(user)
+                }
+            });
+
+            if (confirmToUser) {
+                await prisma.user.update({
+                    where: {
+                        id: Number(user)
+                    },
+                    data: {
+                        is_suspended: false,
+                        last_login: moment().tz('America/El_Salvador').format(),
+                        verified: true,
+                    },
+                });
+                res.status(HttpCode.HTTP_OK).send({ message: 'User has been confirmed successfully' });
+
+            } else {
+                throw new BadRequestException('Token not valid');
+            }
+        }
+    }
+
+    static async sendVerificationEmail(user: User) {
+        const secretKey: string = process.env.SECRET_KEY || '';
+        const token = await Auth.createToken({ user: user.id }, secretKey);
+
+        const header = [
+            {
+                tagName: 'mj-button',
+                attributes: {
+                    width: '80%',
+                    padding: '5px 10px',
+                    'font-size': '20px',
+                    'background-color': '#d58737',
+                    'border-radius': '99px',
+                },
+                content: `Hello ${user.email}`,
+            },
+        ];
+
+        const body = [
+            {
+                tagName: 'mj-button',
+                attributes: {
+                    width: '80%',
+                    padding: '5px 10px',
+                    'font-size': '20px',
+                    'background-color': '#d58737',
+                    href: `${process.env.MAIL_MESSAGE_HOST}/api/v1/user/confirm/${token}`,
+                },
+                content: 'VERIFY MY ACCOUNT',
+            },
+        ];
+
+        await Mailer.sendEmail(
+            {
+                email: user.email,
+                header,
+                subject: 'Email verification',
+                message: 'To verify your account you have to click in the following link: ',
+                body,
+            },
+        );
     }
 }

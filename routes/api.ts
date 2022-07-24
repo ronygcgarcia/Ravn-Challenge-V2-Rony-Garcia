@@ -10,6 +10,7 @@ import signupSchema from '../app/schemas/signupSchema';
 const router = Router();
 router.post('/v1/login', [validation(loginSchema)], Call(ApiController.login));
 router.post('/v1/logout', [auth], Call(ApiController.logout));
-router.post('/v1/signup', [validation(signupSchema)], Call(ApiController.signup))
+router.post('/v1/signup', [validation(signupSchema)], Call(ApiController.signup));
+router.get('/v1/user/confirm/:token', Call(ApiController.confirmUser));
 
 export default router;
