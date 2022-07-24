@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import HttpCode from '../../configs/httpCode';
 import NotFoundException from '../../handlers/NotFoundException';
+import Security from '../services/Security';
 import ValidateParams from '../utils/ValidateParams';
 
 const prisma = new PrismaClient();
@@ -26,9 +27,12 @@ export default class OrderController {
             paginationOptions.skip = Number(perPage) * (Number(page) - 1);
         }
 
-        if (userId) {
+        if (await Security.isManager(Number(req.user.id), 'MANAGER') && userId) {
             await ValidateParams.isValid(userId as string, 'The user_id must be a number');
             filter.user_id = Number(userId);
+        }
+        else if (!await Security.isManager(Number(req.user.id), 'MANAGER')) {
+            filter.user_id = Number(req.user.id);
         }
 
         const totalRows = await await prisma.order.count({

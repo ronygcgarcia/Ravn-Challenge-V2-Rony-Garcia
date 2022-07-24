@@ -35,7 +35,7 @@ model Role {
 
 model Profile {
     id          Int           @id @default(autoincrement())
-    nombre      String
+    name        String
     ProfileRole ProfileRole[] @relation(name: "ProfileToProfileRole")
     UserProfile UserProfile[] @relation(name: "ProfileToUserProfile")
 
