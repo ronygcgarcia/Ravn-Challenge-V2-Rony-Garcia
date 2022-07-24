@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
 import { PrismaClient } from '@prisma/client';
-import User from '../interfaces/User';
+import User from '../interfaces/IUser';
 
 const prisma = new PrismaClient();
 
