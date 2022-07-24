@@ -1,8 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
+import { UploadedFile } from 'express-fileupload';
 import HttpCode from '../../configs/httpCode';
 import BadRequestException from '../../handlers/BadRequestException';
 import NotFoundException from '../../handlers/NotFoundException';
+import Storage from '../core/Storage';
 import ValidateParams from '../utils/ValidateParams';
 
 const prisma = new PrismaClient();
@@ -62,16 +64,7 @@ export default class ProductController {
 
         await ValidateParams.isValid(productId, 'The parameter must be a number');
 
-        const product = await prisma.product.findUnique({
-            where: {
-                id: Number(productId)
-            },
-            include: {
-                ProductImages: true
-            }
-        });
-
-        if (!product) throw new NotFoundException('Product not found');
+        const product = await ProductController.productExist(Number(productId))
 
         return res.status(HttpCode.HTTP_OK).json(product);
     }
@@ -113,12 +106,7 @@ export default class ProductController {
             if (!category) throw new BadRequestException('category not found');
         }
 
-        const product = await prisma.product.findUnique({
-            where: {
-                id: Number(productId)
-            }
-        });
-        if (!product) throw new BadRequestException('product not found');
+        await ProductController.productExist(Number(productId))
 
         const updatedProduct = await prisma.product.update({
             where: {
@@ -146,13 +134,7 @@ export default class ProductController {
         const { product_id: productId } = req.params;
 
         await ValidateParams.isValid(productId, 'The parameter must be a number');
-
-        const product = await prisma.product.findUnique({
-            where: {
-                id: Number(productId)
-            }
-        });
-        if (!product) throw new NotFoundException('product not found');
+        await ProductController.productExist(Number(productId))
 
         await prisma.product.delete({
             where: {
@@ -170,14 +152,8 @@ export default class ProductController {
         const { product_id: productId } = req.params;
 
         await ValidateParams.isValid(productId, 'The parameter must be a number');
+        await ProductController.productExist(Number(productId));
 
-        const productExist = await prisma.product.findUnique({
-            where: {
-                id: Number(productId)
-            }
-        });
-
-        if (!productExist) throw new NotFoundException('product not found');
         await prisma.product.update({
             where: {
                 id: Number(productId)
@@ -190,5 +166,46 @@ export default class ProductController {
         return res.status(HttpCode.HTTP_OK).json({
             message: `The product has been ${active ? 'enabled' : 'disabled'} successfully`
         });
+    }
+
+    static async uploadImage(req: Request, res: Response) {
+        const { product_id: productId } = req.params;
+        const picture = req.files?.picture as UploadedFile;
+        if (!picture) throw new BadRequestException('picture is required')
+        await ValidateParams.isValid(productId, 'The parameter must be a number');
+        await ProductController.productExist(Number(productId))
+
+        const pictures = await prisma.productImages.count({
+            where: {
+                product_id: Number(productId)
+            }
+        });
+        if (pictures >= Number(process.env.MAX_PIC_PRODUCTS)) throw new BadRequestException('cannot upload more pictures');
+
+        const file = await Storage.disk('products').put({
+            file: picture
+        });
+
+        await prisma.productImages.create({
+            data: {
+                path: file.path,
+                product_id: Number(productId)
+            }
+        });
+
+        return res.status(HttpCode.HTTP_CREATED).json({
+            message: 'Image saved succesfully'
+        });
+    }
+
+    static async productExist(productId: number) {
+        const product = await prisma.product.findUnique({
+            where: {
+                id: Number(productId)
+            }
+        });
+        if (!product) throw new NotFoundException('product not found');
+
+        return product;
     }
 }
