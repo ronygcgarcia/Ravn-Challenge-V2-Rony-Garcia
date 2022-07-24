@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment';
 import NoAuthException from '../../handlers/NoAuthException';
-import Token from '../interfaces/Token';
+import Token from '../interfaces/IToken';
 import Handler from '../../handlers/Handler';
-import User from '../interfaces/User';
+import User from '../interfaces/IUser';
 
 const prisma = new PrismaClient();
 
