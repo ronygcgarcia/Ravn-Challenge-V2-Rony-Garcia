@@ -7,5 +7,6 @@ const router = Router();
 router.get('/', [auth], Call(OrderController.index));
 router.get('/:order_id', [auth], Call(OrderController.show));
 router.post('/', [auth], Call(OrderController.store));
+router.post('/:order_id/payment', [auth], Call(OrderController.payment))
 
 export default router;

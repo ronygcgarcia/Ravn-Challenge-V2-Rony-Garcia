@@ -140,4 +140,23 @@ export default class OrderController {
 
         return order;
     }
+
+    static async payment(req: Request, res: Response) {
+        const { order_id: orderId } = req.params;
+
+        const order = await OrderController.orderExist(Number(orderId), req.user.id);
+
+        await prisma.order.update({
+            where: {
+                id: order.id
+            },
+            data: {
+                status_id: 2
+            }
+        });
+
+        return res.status(HttpCode.HTTP_OK).json({
+            message: 'Order successfully paid'
+        });
+    }
 }
