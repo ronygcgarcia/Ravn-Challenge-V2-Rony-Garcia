@@ -6,6 +6,7 @@ import validation from '../app/middlewares/validate';
 import loginSchema from '../app/schemas/loginSchema';
 import signupSchema from '../app/schemas/signupSchema';
 import productRoutes from './api/productRoutes';
+import orderRoutes from './api/orderRoutes';
 
 
 const router = Router();
@@ -15,5 +16,6 @@ router.post('/v1/signup', [validation(signupSchema)], Call(ApiController.signup)
 router.get('/v1/user/confirm/:token', Call(ApiController.confirmUser));
 
 router.use('/v1/products', productRoutes);
+router.use('/v1/orders', orderRoutes);
 
 export default router;
