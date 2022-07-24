@@ -4,10 +4,12 @@ import Call from '../../app/utils/Call';
 import auth from '../../app/middlewares/Auth';
 import validation from '../../app/middlewares/validate';
 import productCreateSchema from '../../app/schemas/productCreateSchema';
+import productUpdateSchema from '../../app/schemas/productUpdateSchema';
 
 const router = Router();
 router.get('/', Call(ProductController.index));
 router.get('/:product_id', Call(ProductController.show));
-router.post('/', [auth, validation(productCreateSchema)], Call(ProductController.store))
+router.post('/', [auth, validation(productCreateSchema)], Call(ProductController.store));
+router.put('/:product_id', [auth, validation(productUpdateSchema)], Call(ProductController.update));
 
 export default router;
