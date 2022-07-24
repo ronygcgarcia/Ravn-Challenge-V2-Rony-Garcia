@@ -97,4 +97,48 @@ export default class ProductController {
 
         return res.status(HttpCode.HTTP_CREATED).json(product);
     }
+
+    static async update(req: Request, res: Response) {
+        const { name, price, quantity, category_id: categoryId } = req.body;
+        const { product_id: productId } = req.params;
+
+        await ValidateParams.isValid(productId, 'The parameter must be a number');
+
+        if (categoryId) {
+            const category = await prisma.category.findUnique({
+                where: {
+                    id: Number(categoryId)
+                },
+            });
+            if (!category) throw new BadRequestException('category not found');
+        }
+
+        const product = await prisma.product.findUnique({
+            where: {
+                id: Number(productId)
+            }
+        });
+        if (!product) throw new BadRequestException('product not found');
+
+        const updatedProduct = await prisma.product.update({
+            where: {
+                id: Number(productId)
+            },
+            data: {
+                name,
+                price,
+                quantity,
+                category_id: categoryId
+            },
+            select: {
+                id: true,
+                name: true,
+                price: true,
+                quantity: true,
+                category_id: true,
+            }
+        });
+
+        return res.status(HttpCode.HTTP_OK).json(updatedProduct);
+    }
 }
