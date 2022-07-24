@@ -199,7 +199,7 @@ export default class ProductController {
     }
 
     static async addCart(req: Request, res: Response) {
-        const { product_id: productId } = req.body;
+        const { product_id: productId, quantity } = req.body;
         await ProductController.productExist(productId);
 
         let cart = await prisma.cart.findFirst({
@@ -216,18 +216,23 @@ export default class ProductController {
             });
         }
 
-        cart = await prisma.cart.update({
+        const productCart = await prisma.productCart.findFirst({
             where: {
-                id: cart.id
-            },
-            data: {
-                ProductCart: {
-                    create: {
-                        product_id: Number(productId)
-                    }
-                }
+                cart_id: cart.id,
+                product_id: productId,
             }
         });
+
+        if (productCart) throw new BadRequestException('product is already added')
+
+        await prisma.productCart.create({
+            data: {
+                cart_id: cart.id,
+                product_id: productId,
+                quantity
+            }
+        })
+
 
         return res.status(HttpCode.HTTP_CREATED).json({
             message: 'Product added to cart'
@@ -255,7 +260,7 @@ export default class ProductController {
 
         await prisma.productCart.delete({
             where: {
-                cart_id_product_id: { cart_id: cart.id, product_id: productId }
+                id: productCart.id
             }
         });
 
