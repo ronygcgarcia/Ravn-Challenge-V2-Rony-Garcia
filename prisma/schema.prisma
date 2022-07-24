@@ -140,9 +140,18 @@ model ProductCart {
     cart       Cart    @relation(fields: [cart_id], references: [id])
     product_id Int
     product    Product @relation(fields: [product_id], references: [id])
+    quantity   Int
 
     @@id([cart_id, product_id])
     @@map("products_carts")
+}
+
+model OrderStatus {
+    id    Int     @id @default(autoincrement())
+    name  String
+    Order Order[]
+
+    @@map("order_status")
 }
 
 model Order {
@@ -153,6 +162,8 @@ model Order {
     user        User          @relation(fields: [user_id], references: [id])
     address     String
     phone       String
+    status      OrderStatus   @relation(fields: [status_id], references: [id])
+    status_id   Int           @default(1)
     OrderDetail OrderDetail[]
 
     @@map("orders")
@@ -164,6 +175,7 @@ model OrderDetail {
     product    Product @relation(fields: [product_id], references: [id])
     order_id   Int
     order      Order   @relation(fields: [order_id], references: [id])
+    quantity   Int
 
     @@map("order_details")
 }
