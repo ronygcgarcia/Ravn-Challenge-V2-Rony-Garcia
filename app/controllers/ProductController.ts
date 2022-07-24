@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import HttpCode from '../../configs/httpCode';
+import NotFoundException from '../../handlers/NotFoundException';
 import ValidateParams from '../utils/ValidateParams';
 
 const prisma = new PrismaClient();
@@ -37,6 +38,9 @@ export default class ProductController {
         const products = await prisma.product.findMany({
             where: filter,
             ...paginationOptions,
+            include: {
+                ProductImages: true
+            },
             orderBy: {
                 id: 'desc'
             },
@@ -50,5 +54,24 @@ export default class ProductController {
             });
         }
         return res.status(HttpCode.HTTP_OK).json(products)
+    }
+
+    static async show(req: Request, res: Response) {
+        const { product_id: productId } = req.params;
+
+        await ValidateParams.isValid(productId, 'The parameter must be a number');
+
+        const product = await prisma.product.findUnique({
+            where: {
+                id: Number(productId)
+            },
+            include: {
+                ProductImages: true
+            }
+        });
+
+        if (!product) throw new NotFoundException('Product not found');
+
+        return res.status(HttpCode.HTTP_OK).json(product);
     }
 }
