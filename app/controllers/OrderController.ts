@@ -64,16 +64,22 @@ export default class OrderController {
     static async show(req: Request, res: Response) {
         const { order_id: orderId } = req.params;
 
-        const order = await OrderController.orderExist(Number(orderId));
+        const order = await OrderController.orderExist(Number(orderId), req.user.id);
 
         return res.status(HttpCode.HTTP_OK).json(order);
     }
 
-    static async orderExist(orderId: number) {
-        const order = await prisma.order.findUnique({
-            where: {
-                id: Number(orderId)
-            },
+    static async orderExist(orderId: number, userId: number) {
+        const filter: {
+            id: number,
+            user_id?: number
+        } = {
+            id: Number(orderId),
+        }
+        if (!await Security.isManager(Number(userId), 'MANAGER')) filter.user_id = userId;
+
+        const order = await prisma.order.findFirst({
+            where: filter,
             include: {
                 OrderDetail: {
                     include: {
