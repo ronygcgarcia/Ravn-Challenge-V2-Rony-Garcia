@@ -14,9 +14,8 @@ const transporter = nodemailer.createTransport({
 export default class Mailer {
     static async sendEmail(params: IMail): Promise<void> {
         const {
-            email, header, subject, message, body = [],
+            email, header = [], subject, message, body = [],
         } = params;
-
         const { html } = mjml2html({
             tagName: 'mjml',
             attributes: {},
