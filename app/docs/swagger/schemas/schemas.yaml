@@ -1,2 +1,4 @@
 Login:
-  $include: "loginSchema.yaml"
+ $include: 'loginSchema.yaml'
+Error:
+ $include: 'errorSchema.yaml'

@@ -6,34 +6,262 @@
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Login"
+            $ref: '#/components/schemas/Login'
       required: true
     responses:
-      200:
-        description:
+      '200':
+        description: Token and refresh token to access the system
         content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                  refresh_token:
-                    type: string
-      400:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                refresh_token:
+                  type: string
+      '400':
         description: Bad Request
-        content: {}
-      401:
-        description: Acceso no Autorizado
-        content: {}
-      404:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
         description: Not Found
-      405:
-        description: Not Allowed
-        content: {}
-      500:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
         description: Internal Server Error
-        content: {}
-
+        content: null
+    x-codegen-request-body-name: body
+  area: api
+/api/v1/logout:
+  post:
+    tags:
+      - auth
+    responses:
+      '200':
+        description: Token and refresh token to access the system
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error
+        content: null
+    x-codegen-request-body-name: body
+  area: api
+/api/v1/signup:
+  post:
+    tags:
+      - auth
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: 
+                type: string
+              password:
+                type: string
+              confirm_password:
+                type: string
+      required: true
+    responses:
+      '200':
+        description: User object created
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: 
+                  type: integer
+                email:
+                  type: string
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error
+        content: null
+    x-codegen-request-body-name: body
+  area: api
+/api/v1/user/confirm/{token}:
+  get:
+    parameters:
+    - in: path
+      name: token
+      required: true
+      type: string
+      description: Token to validate user and confirm
+    tags:
+      - auth    
+    responses:
+      '200':
+        description: User object created
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: User has been confirmed successfully
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error
+        content: null
+    x-codegen-request-body-name: body
+  area: api
+/api/v1/user/recovery/password:
+  post:    
+    tags:
+      - auth    
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: 
+                type: string
+      required: true
+    responses:
+      '200':
+        description: Success message 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: Email has been sent
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error
+        content: null
+    x-codegen-request-body-name: body
+  area: api
+/api/v1/user/change/password:
+  post:    
+    tags:
+      - auth    
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              password: 
+                type: string
+              confirm_password: 
+                type: string
+      required: true
+    responses:
+      '200':
+        description: Success message
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: Updated password
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error
+        content: null
     x-codegen-request-body-name: body
   area: api
