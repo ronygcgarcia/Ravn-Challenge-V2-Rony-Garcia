@@ -21,4 +21,6 @@ router.post('/:product_id/cart', [auth, validation(addCartSchema)], Call(Product
 router.delete('/:product_id/cart', [auth, validation(removeCartSchema)], Call(ProductController.removeCart));
 router.post('/:product_id/reaction', [auth], Call(ProductController.setReaction));
 
+router.get('/:product_image_id/image', Call(ProductController.getImage));
+
 export default router;
