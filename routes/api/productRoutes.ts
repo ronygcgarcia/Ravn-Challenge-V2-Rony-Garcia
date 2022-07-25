@@ -7,7 +7,7 @@ import productCreateSchema from '../../app/schemas/productCreateSchema';
 import productUpdateSchema from '../../app/schemas/productUpdateSchema';
 import productSetStatusSchema from '../../app/schemas/productSetStatusSchema';
 import addCartSchema from '../../app/schemas/addCartSchema';
-import removeCartSchema from '../../app/schemas/removeCartSchema'
+import removeCartSchema from '../../app/schemas/removeCartSchema';
 
 const router = Router();
 router.get('/', Call(ProductController.index));
