@@ -320,4 +320,20 @@ export default class ProductController {
 
         return res.status(HttpCode.HTTP_OK).send();
     }
+
+    static async getImage(req: Request, res: Response) {
+        const { product_image_id: productImageId } = req.params;
+
+        const image = await prisma.productImages.findUnique({
+            where: {
+                id: Number(productImageId)
+            }
+        });
+        if (!image) throw new NotFoundException('Image not found');
+
+        const file = await Storage.getFile(image.path, 'products');
+
+        res.setHeader('Content-Type', 'image/*');
+        return res.status(HttpCode.HTTP_OK).send(file.data);
+    }
 }
