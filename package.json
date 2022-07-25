@@ -10,6 +10,9 @@
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
         "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml"
     },
+    "prisma": {
+        "seed": "node --loader ts-node/esm prisma/seed.ts"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ronygcgarcia/Ravn-Challenge-V2-Rony-Garcia.git"
@@ -50,7 +53,7 @@
         "@types/express-fileupload": "^1.2.2",
         "@types/jsonwebtoken": "^8.5.8",
         "@types/mjml": "^4.7.0",
-        "@types/node": "^18.0.6",
+        "@types/node": "^18.6.0",
         "@types/nodemailer": "^6.4.4",
         "@types/swagger-ui-express": "^4.1.3",
         "@types/uuid": "^8.3.4",
@@ -70,6 +73,7 @@
         "npm": "^8.15.0",
         "prettier": "^2.7.1",
         "prisma": "^4.1.0",
+        "ts-node": "^10.9.1",
         "tsconfig-paths": "^4.0.0",
         "typescript": "^4.7.4",
         "yaml2json": "^1.0.2",
