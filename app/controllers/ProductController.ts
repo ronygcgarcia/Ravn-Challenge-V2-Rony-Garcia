@@ -240,8 +240,8 @@ export default class ProductController {
     }
 
     static async removeCart(req: Request, res: Response) {
-        const { product_id: productId } = req.body;
-        await ProductController.productExist(productId);
+        const { product_id: productId } = req.params;
+        await ProductController.productExist(Number(productId));
 
         const cart = await prisma.cart.findFirst({
             where: {
@@ -253,7 +253,7 @@ export default class ProductController {
         const productCart = await prisma.productCart.findFirst({
             where: {
                 cart_id: cart.id,
-                product_id: productId
+                product_id: Number(productId)
             }
         });
         if (!productCart) throw new BadRequestException('The product is not in the cart');
