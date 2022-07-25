@@ -273,6 +273,9 @@ export default class ProductController {
         const product = await prisma.product.findUnique({
             where: {
                 id: Number(productId)
+            },
+            include: {
+                ProductImages: true
             }
         });
         if (!product) throw new NotFoundException('product not found');
