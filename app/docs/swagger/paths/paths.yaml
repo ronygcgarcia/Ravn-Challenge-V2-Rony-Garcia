@@ -1,2 +1,3 @@
 $include: "auth.yaml"
-
+$include: "product.yaml"
+$include: "order.yaml"
