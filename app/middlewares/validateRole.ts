@@ -7,6 +7,7 @@ const validateRole = (role: string) => async (req: Request, res: Response, next:
     try {
         const valid = await Security.isGranted(req.user.id, role);
         if (!valid) throw new ForbiddenException();
+        next();
     }
     catch (err) {
         Handler.handle(err, req, res, next);
