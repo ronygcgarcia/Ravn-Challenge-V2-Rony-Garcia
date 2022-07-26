@@ -157,8 +157,8 @@ describe('Getting product image', () => {
 
 describe('Adding a product to cart', () => {
     it('Should return status code 201 and the product object', async () => {
-        const response = await request(url).post(`/api/v1/products/${productId}/cart`).send({
-            quantity: 50,
+        const response = await request(url).post(`/api/v1/products/cart`).send({
+            quantity: 1,
             product_id: productId
         }).set({
             Authorization: clientToken
@@ -212,7 +212,7 @@ describe('List of orders', () => {
 let order: number;
 describe('Creating and order', () => {
     it('Should return status code 200 order object created', async () => {
-        await request(url).post(`/api/v1/products/${productId}/cart`).send({
+        await request(url).post(`/api/v1/products/cart`).send({
             quantity: 1,
             product_id: productId
         }).set({
@@ -238,7 +238,7 @@ describe('Show order details', () => {
         const response = await request(url).get(`/api/v1/orders/${order}`).set({
             Authorization: clientToken
         });
-
+    
         expect(response.statusCode).toBe(200);
     });
 });
@@ -248,7 +248,7 @@ describe('Update order status', () => {
         const response = await request(url).post(`/api/v1/orders/${order}/payment`).set({
             Authorization: clientToken
         });
-
+    
         expect(response.statusCode).toBe(200);
         expect(response.body).toMatchObject({
             message: 'Order successfully paid'

@@ -1,7 +1,10 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import moment from 'moment';
 import HttpCode from '../../configs/httpCode';
+import BadRequestException from '../../handlers/BadRequestException';
 import NotFoundException from '../../handlers/NotFoundException';
 import IProductCart from '../interfaces/IProductCart';
 import Security from '../services/Security';
@@ -86,6 +89,7 @@ export default class OrderController {
             }
         });
         if (!cart) throw new NotFoundException('cart not found');
+        if(!cart?.ProductCart.length) throw new BadRequestException('The cart is empty');
         const total = cart?.ProductCart.reduce((acumulator: number, value: IProductCart) => acumulator + value.product.price * value.quantity, 0);
         const orderDetails = cart?.ProductCart.map((detail) => ({
             product_id: detail.product_id,
@@ -120,7 +124,7 @@ export default class OrderController {
         } = {
             id: Number(orderId),
         }
-        if (!await Security.isManager(Number(userId), 'MANAGER')) filter.user_id = userId;
+        if (userId && !await Security.isManager(Number(userId), 'MANAGER')) filter.user_id = userId;
 
         const order = await prisma.order.findFirst({
             where: filter,
@@ -146,6 +150,17 @@ export default class OrderController {
 
         const order = await OrderController.orderExist(Number(orderId), req.user.id);
 
+        for(const product of order.OrderDetail){
+            await prisma.product.update({
+                where: {
+                    id: product.product_id
+                },
+                data: {
+                    quantity: { decrement: product.quantity }
+                }
+            });
+        }
+        
         await prisma.order.update({
             where: {
                 id: order.id

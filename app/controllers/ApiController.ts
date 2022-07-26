@@ -121,14 +121,22 @@ export default class ApiController {
                         email,
                         password: passwordCrypt,
                         is_suspended: false,
-                        verified: false
+                        verified: process.env.USER_VERIFIED === 'true',
+                        UserProfile: {
+                            create: {
+                                profile_id: 2
+                            }
+                        }
                     }
-                })
+                }),
             ]);
 
             await ApiController.sendVerificationEmail(user);
 
-            return res.status(HttpCode.HTTP_CREATED).json(user);
+            return res.status(HttpCode.HTTP_CREATED).json({
+                id: user.id,
+                email: user.email
+            });
         }
         catch (e) {
             throw e
