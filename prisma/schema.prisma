@@ -92,7 +92,7 @@ model ReactionType {
 model ProductImages {
     id         Int     @id @default(autoincrement())
     path       String
-    product    Product @relation(fields: [product_id], references: [id])
+    product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
     product_id Int
 
     @@map("product_images")
@@ -120,7 +120,7 @@ model Reaction {
     user             User         @relation(fields: [user_id], references: [id])
     reaction_type_id Int
     reaction_type    ReactionType @relation(fields: [reaction_type_id], references: [id])
-    product          Product      @relation(fields: [product_id], references: [id])
+    product          Product      @relation(fields: [product_id], references: [id], onDelete: Cascade)
     product_id       Int
 
     @@map("reactions")
@@ -140,7 +140,7 @@ model ProductCart {
     cart_id    Int
     cart       Cart    @relation(fields: [cart_id], references: [id])
     product_id Int
-    product    Product @relation(fields: [product_id], references: [id])
+    product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
     quantity   Int
 
     @@map("products_carts")
