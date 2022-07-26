@@ -17,7 +17,7 @@ router.put('/:product_id', [auth, validation(productUpdateSchema), validateRole(
 router.delete('/:product_id', [auth, validateRole('ROLE_DELETE_PRODUCTS')], Call(ProductController.delete));
 router.patch('/:product_id', [auth, validation(productSetStatusSchema), validateRole('ROLE_DISABLE_PRODUCTS')], Call(ProductController.setStatus));
 router.put('/:product_id/image', [auth, validateRole('ROLE_CREATE_PRODUCT_IMAGES')], Call(ProductController.uploadImage));
-router.post('/:product_id/cart', [auth, validation(addCartSchema), validateRole('ROLE_ADD_CART_PRODUCT')], Call(ProductController.addCart));
+router.post('/cart', [auth, validation(addCartSchema), validateRole('ROLE_ADD_CART_PRODUCT')], Call(ProductController.addCart));
 router.delete('/:product_id/cart', [auth, validateRole('ROLE_REMOVE_CART_PRODUCT')], Call(ProductController.removeCart));
 router.post('/:product_id/reaction', [auth, validateRole('ROLE_CREATE_REACTION_PRODUCT')], Call(ProductController.setReaction));
 

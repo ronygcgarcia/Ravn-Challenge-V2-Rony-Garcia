@@ -132,9 +132,17 @@ export default class ProductController {
 
     static async delete(req: Request, res: Response) {
         const { product_id: productId } = req.params;
-
+        
         await ValidateParams.isValid(productId, 'The parameter must be a number');
-        await ProductController.productExist(Number(productId))
+        await ProductController.productExist(Number(productId));
+
+        const orderDetail = await prisma.orderDetail.findFirst({
+            where: {
+                product_id: Number(productId)
+            }
+        });
+
+        if(orderDetail) throw new BadRequestException('Is not possible to delete this product, because it´s associated to an order');
 
         await prisma.product.delete({
             where: {
@@ -200,8 +208,9 @@ export default class ProductController {
 
     static async addCart(req: Request, res: Response) {
         const { product_id: productId, quantity } = req.body;
-        await ProductController.productExist(productId);
-
+        const product = await ProductController.productExist(productId);
+        if(quantity > product.quantity) throw new BadRequestException(`Cannot add more than ${product.quantity}`);
+        
         let cart = await prisma.cart.findFirst({
             where: {
                 user_id: req.user.id
