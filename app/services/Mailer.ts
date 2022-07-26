@@ -79,6 +79,6 @@ export default class Mailer {
             html,
         };
 
-        await transporter.sendMail(mailConfig);
+        // await transporter.sendMail(mailConfig);
     }
 }

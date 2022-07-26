@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1658863501508" clover="3.2.0">
+  <project timestamp="1658863501508" name="All files">
+    <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0" elements="12" coveredelements="11" complexity="0" loc="10" ncloc="10" packages="2" files="2" classes="2"/>
+    <package name="configs">
+      <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+      <file name="Env.ts" path="C:\Users\RONYA\OneDrive\Escritorio\Ravn\Ravn-Challenge-V2-Rony-Garcia\configs\Env.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="6" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="test">
+      <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="config.ts" path="C:\Users\RONYA\OneDrive\Escritorio\Ravn\Ravn-Challenge-V2-Rony-Garcia\test\config.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

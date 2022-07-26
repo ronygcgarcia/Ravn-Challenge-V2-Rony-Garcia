@@ -41,7 +41,6 @@ export default class ApiController {
             },
             data: {
                 last_login: moment().format(),
-                token_valid_after: moment().tz('America/El_Salvador').format(),
             },
         });
 

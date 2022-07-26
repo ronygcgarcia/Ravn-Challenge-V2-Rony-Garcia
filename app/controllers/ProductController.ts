@@ -103,7 +103,7 @@ export default class ProductController {
                     id: Number(categoryId)
                 },
             });
-            if (!category) throw new BadRequestException('category not found');
+            if (!category) throw new NotFoundException('category not found');
         }
 
         await ProductController.productExist(Number(productId))
