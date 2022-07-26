@@ -21,25 +21,25 @@
                 refresh_token:
                   type: string
       '400':
-        description: Bad Request
+        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Not Found
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access. 
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '500':
-        description: Internal Server Error
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
     x-codegen-request-body-name: body
   area: api
@@ -51,25 +51,25 @@
       '200':
         description: Token and refresh token to access the system
       '400':
-        description: Bad Request
+        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Not Found
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '500':
-        description: Internal Server Error
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
     x-codegen-request-body-name: body
   area: api
@@ -103,25 +103,25 @@
                 email:
                   type: string
       '400':
-        description: Bad Request
+        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Not Found
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '500':
-        description: Internal Server Error
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
     x-codegen-request-body-name: body
   area: api
@@ -147,25 +147,25 @@
                   type: string
                   example: User has been confirmed successfully
       '400':
-        description: Bad Request
+        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Not Found
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '500':
-        description: Internal Server Error
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
     x-codegen-request-body-name: body
   area: api
@@ -194,25 +194,25 @@
                   type: string
                   example: Email has been sent
       '400':
-        description: Bad Request
+        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Not Found
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '500':
-        description: Internal Server Error
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
     x-codegen-request-body-name: body
   area: api
@@ -243,25 +243,25 @@
                   type: string
                   example: Updated password
       '400':
-        description: Bad Request
+        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '401':
-        description: Unauthorized
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '403':
-        description: Not Found
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
       '500':
-        description: Internal Server Error
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
     x-codegen-request-body-name: body
   area: api
