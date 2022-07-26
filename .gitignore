@@ -9,3 +9,4 @@ app/docs/index.json
 app/docs/test.json
 app/docs/test.yaml
 storage
+coverage
