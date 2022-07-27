@@ -1,0 +1,563 @@
+/api/v1/products:
+  get:    
+    tags:
+      - products        
+    responses:
+      '200':
+        description: List of products available in the store to be sold.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: 
+                    type: integer
+                  name: 
+                    type: string
+                  price:
+                    type: number
+                  quantity:
+                    type: integer
+                  active: 
+                    type: boolean
+                  category_id:
+                    type: integer
+                  ProductImages: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: 
+                          type: integer
+                        path:
+                          type: string
+                        product_id:
+                          type: integer
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications..The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+  post:    
+    tags:
+      - products
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+              quantity:
+                type: integer
+              category_id:
+                type: integer
+      required: true   
+    responses:
+      '200':
+        description: Product successfully created with its corresponding properties.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: 
+                    type: integer
+                  name: 
+                    type: string
+                  price:
+                    type: number
+                  quantity:
+                    type: integer
+                  active: 
+                    type: boolean
+                  category_id:
+                    type: integer                  
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+/api/v1/products/{product_id}:
+  parameters:
+    - in: path
+      name: product_id
+      required: true
+      type: integer
+      description: product id to show details
+  get:  
+    tags:
+      - products        
+    responses:
+      '200':
+        description: The product details have been successfully obtained.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: 
+                  type: integer
+                name: 
+                  type: string
+                price:
+                  type: number
+                quantity:
+                  type: integer
+                active: 
+                  type: boolean
+                category_id:
+                  type: integer
+                ProductImages: 
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id: 
+                        type: integer
+                      path:
+                        type: string
+                      product_id:
+                        type: integer
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+  put:
+    tags:
+      - products
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+              quantity:
+                type: integer
+              category_id:
+                type: integer
+      required: true   
+    responses:
+      '200':
+        description: Product properties updated successfully.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: 
+                    type: integer
+                  name: 
+                    type: string
+                  price:
+                    type: number
+                  quantity:
+                    type: integer
+                  category_id:
+                    type: integer                  
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+  delete:    
+    tags:
+      - products    
+    responses:
+      '200':
+        description: Product deleted successfully.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: The product has been enabled successfully             
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+  patch:    
+    tags:
+      - products  
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              active:
+                type: boolean
+      required: true     
+    responses:
+      '200':
+        description: Changing product availability to be sold.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: The product has been enabled successfully            
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+/api/v1/products/{product_id}/image:
+  parameters:
+    - in: path
+      name: product_id
+      required: true
+      type: integer
+      description: product id
+  put:  
+    tags:
+      - products   
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              picture:
+                type: string
+      required: true        
+    responses:
+      '200':
+        description: Updating the product image to be sold.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: Image saved succesfully   
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+  area: api
+/api/v1/products/{product_id}/cart:
+  parameters:
+    - in: path
+      name: product_id
+      required: true
+      type: integer
+      description: product id
+  post:  
+    tags:
+      - products   
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              product_id:
+                type: integer
+              quantity:
+                type: integer
+      required: true        
+    responses:
+      '200':
+        description: Product added to cart successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: Product added to cart   
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+  delete:  
+    tags:
+      - products       
+    responses:
+      '200':
+        description: Product removed to cart successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: 
+                  type: string
+                  example: Product was removed   
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+/api/v1/products/{product_id}/reaction:
+  parameters:
+    - in: path
+      name: product_id
+      required: true
+      type: integer
+      description: Adding reactions to the product according to its id
+  post:  
+    tags:
+      - products   
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reaction_type_id:
+                type: integer
+      required: true        
+    responses:
+      '200':
+        description: No message result
+        content: null
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api
+/api/v1/products/{product_image_id}/image:
+  parameters:
+    - in: path
+      name: product_image_id
+      required: true
+      type: integer
+      description: Getting the product image according to its id
+  get:  
+    tags:
+      - products       
+    responses:
+      '200':
+        description: Product picture got successfully
+        content: 
+          image/*:
+            schema: 
+              type: string
+              format: binary
+      '400':
+        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
+        content: null
+    x-codegen-request-body-name: body
+    area: api

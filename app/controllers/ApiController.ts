@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import moment from 'moment';
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
@@ -10,8 +9,9 @@ import Mailer from '../services/Mailer';
 import BadRequestException from '../../handlers/BadRequestException';
 import Token from '../interfaces/IToken';
 import User from '../interfaces/IUser';
-
-const prisma = new PrismaClient();
+import UnprocessableEntityException from '../../handlers/UnprocessableEntityException';
+import NotFoundException from '../../handlers/NotFoundException';
+import prisma from '../db/client';
 
 export default class ApiController {
     static async login(req: Request, res: Response) {
@@ -39,7 +39,6 @@ export default class ApiController {
             },
             data: {
                 last_login: moment().format(),
-                token_valid_after: moment().tz('America/El_Salvador').format(),
             },
         });
 
@@ -119,14 +118,22 @@ export default class ApiController {
                         email,
                         password: passwordCrypt,
                         is_suspended: false,
-                        verified: false
+                        verified: process.env.USER_VERIFIED === 'true',
+                        UserProfile: {
+                            create: {
+                                profile_id: 2
+                            }
+                        }
                     }
-                })
+                }),
             ]);
 
             await ApiController.sendVerificationEmail(user);
 
-            return res.status(HttpCode.HTTP_CREATED).json(user);
+            return res.status(HttpCode.HTTP_CREATED).json({
+                id: user.id,
+                email: user.email
+            });
         }
         catch (e) {
             throw e
@@ -161,6 +168,160 @@ export default class ApiController {
                 throw new BadRequestException('Token not valid');
             }
         }
+    }
+
+    static async recoveryPasswordEmail(req: Request, res: Response) {
+        const { email } = req.body;
+        const user = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        });
+
+        if (!user) throw new UnprocessableEntityException('The email is not valid');
+
+        const token = await Auth.createToken({
+            user: {
+                id: user.id,
+                email: user.email,
+            },
+        }, process.env.SECRET_KEY as string);
+
+        await Auth.refreshToken(user);
+
+        await prisma.user.update(
+            {
+                where: {
+                    id: user.id
+                },
+                data: {
+                    token_valid_after: moment().tz('America/El_Salvador').format()
+                }
+            },
+        );
+
+        const uri = `${process.env.MAIL_MESSAGE_HOST}/api/v1/recovery/password/${token}`;
+
+        const header = [
+            {
+                tagName: 'mj-text',
+                attributes: {
+                    align: 'center',
+                    'font-size': '30px',
+                    'font-weight': 'bold',
+                    color: '#d58737',
+                },
+                content: 'Recovery password',
+            },
+            {
+                tagName: 'mj-spacer',
+                attributes: {
+                    'css-class': 'primary',
+                },
+            },
+        ];
+
+        const body = [
+            {
+                tagName: 'mj-button',
+                attributes: {
+                    href: uri,
+                    width: '80%',
+                    padding: '5px 10px',
+                    'font-size': '20px',
+                    'background-color': '#d58737',
+                    'border-radius': '99px',
+                },
+                content: 'Change password',
+            },
+            {
+                tagName: 'mj-text',
+                attributes: {
+                    align: 'justify',
+                },
+                children: [
+                    {
+                        tagName: 'p',
+                        content: 'If it was not you, ignore this email. Your password will be the same.',
+                    },
+                ],
+            },
+        ];
+
+        await Mailer.sendEmail({
+            email: user.email, header, subject: 'Recovery password', body, message: 'If it was not you, ignore this email. Your password will be the same.'
+        })
+
+        return res.status(HttpCode.HTTP_OK).json({ message: 'Email has been sent' });
+    }
+
+    static async changePassword(req: Request, res: Response) {
+        const { password, confirm_password: confirmPassword } = req.body;
+        const { authorization } = req.headers;
+
+        if (!authorization) throw new NoAuthException();
+
+        const token = authorization.replace('Bearer ', '');
+        const salt = bcrypt.genSaltSync();
+        const passwordCrypt = bcrypt.hashSync(password, salt);
+
+        if (password !== confirmPassword) {
+            throw new NotFoundException('Error! Password does not match');
+        }
+        const { user } = jwt.verify(token, process.env.SECRET_KEY as string) as Token;
+
+        await prisma.user.update(
+            {
+                where: {
+                    id: user.id,
+                },
+                data: {
+                    password: passwordCrypt,
+                    token_valid_after: moment().tz('America/El_Salvador').format(),
+                }
+            },
+        );
+
+        const header = [
+            {
+                tagName: 'mj-button',
+                attributes: {
+                    width: '80%',
+                    padding: '5px 10px',
+                    'font-size': '20px',
+                    'background-color': '#d58737',
+                    'border-radius': '99px',
+                },
+                content: `Hello ${user.email}`,
+            },
+        ];
+
+        const body = [
+            {
+                tagName: 'mj-button',
+                attributes: {
+                    width: '80%',
+                    padding: '5px 10px',
+                    'font-size': '20px',
+                    'background-color': '#d58737',
+                },
+                content: 'Updated password',
+            },
+        ];
+
+        await Mailer.sendEmail(
+            {
+                email: user.email,
+                header,
+                subject: 'Updated password',
+                message: 'Your password has been updated: ',
+                body,
+            },
+        );
+
+        return res.status(HttpCode.HTTP_OK).json({
+            message: 'Updated password',
+        });
     }
 
     static async sendVerificationEmail(user: User) {
