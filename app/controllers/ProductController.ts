@@ -76,7 +76,7 @@ export default class ProductController {
                 id: Number(categoryId)
             },
         });
-        if (!category) throw new BadRequestException('Category not found');
+        if (!category) throw new NotFoundException('Category not found');
 
         const product = await prisma.product.create({
             data: {

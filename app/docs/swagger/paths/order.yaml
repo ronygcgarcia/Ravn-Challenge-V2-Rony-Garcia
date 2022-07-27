@@ -1,5 +1,31 @@
 /api/v1/orders:  
   get:  
+    parameters:
+    - in: query
+      name: page
+      required: true
+      type: integer
+      description: number page
+    - in: query
+      name: per_page
+      required: true
+      type: integer
+      description: quantity per 
+    - in: query
+      name: page
+      required: true
+      type: integer
+      description: number page
+    - in: query
+      name: pagination
+      required: false
+      type: string
+      description: Parameter to deactivate pagination
+    - in: query
+      name: user_id
+      required: true
+      type: integer
+      description: Parameter to filter by if when the logged user is manager
     tags:
       - orders       
     responses:
@@ -40,24 +66,42 @@
                           type: integer
                         quantity:
                           type: integer
-      '400':
-        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications..The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+      '422':
+        description: Unprocessable entity.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications..The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:
+              Page:
+                value:
+                  message: per_page must be a number
+              Per Page:
+                value:
+                  message: per_page must be a number
+              User id:
+                value:
+                  message: The user_id must be a number
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '403':
         description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples: 
+              Forbidden:
+                value:
+                  message: Denied access
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -119,18 +163,36 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:
+              Cart empty:
+                value:
+                  message: The cart is empty
+              Wrong body request: 
+                value:
+                  message: Wrong body request
+                  fields:
+                    message: "property is required"
+                    field: property
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '403':
         description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Denied access: 
+                value:
+                  message: Denied access
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -210,24 +272,26 @@
                                     type: string
                                   product_id:
                                     type: integer
-      '400':
-        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications..The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '403':
         description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:
+              Denied access:
+                value:
+                  message: Denied access
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -254,24 +318,26 @@
                 message:
                   type: string
                   example: Order successfully paid                
-      '400':
-        description: Bad Request.The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications..The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '403':
         description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.. This error occurs when you try to access a page or network resource that you do not have a permission to access.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Denied access: 
+                value:
+                  message: Denied access
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
