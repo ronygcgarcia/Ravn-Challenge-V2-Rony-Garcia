@@ -5,7 +5,8 @@
     "main": "./index.ts",
     "scripts": {
         "build": "npx tsc",
-        "test": "jest -i",
+        "migrate:reset": "npx prisma migrate reset -f",
+        "test": "npm run migrate:reset && dotenv -e .env.test jest -i",
         "start": "node dist/index.js",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
         "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml"
@@ -29,6 +30,7 @@
         "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "dotenv": "^16.0.1",
+        "dotenv-cli": "^6.0.0",
         "express": "^4.18.1",
         "express-fileupload": "^1.4.0",
         "image-type": "^4.1.0",
