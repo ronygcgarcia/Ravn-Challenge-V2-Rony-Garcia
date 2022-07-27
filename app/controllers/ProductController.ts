@@ -76,7 +76,7 @@ export default class ProductController {
                 id: Number(categoryId)
             },
         });
-        if (!category) throw new BadRequestException('category not found');
+        if (!category) throw new BadRequestException('Category not found');
 
         const product = await prisma.product.create({
             data: {
@@ -102,7 +102,7 @@ export default class ProductController {
                     id: Number(categoryId)
                 },
             });
-            if (!category) throw new NotFoundException('category not found');
+            if (!category) throw new NotFoundException('Category not found');
         }
 
         await ProductController.productExist(Number(productId))
@@ -178,7 +178,7 @@ export default class ProductController {
     static async uploadImage(req: Request, res: Response) {
         const { product_id: productId } = req.params;
         const picture = req.files?.picture as UploadedFile;
-        if (!picture) throw new BadRequestException('picture is required')
+        if (!picture) throw new BadRequestException('Picture is required')
         await ValidateParams.isValid(productId, 'The parameter must be a number');
         await ProductController.productExist(Number(productId))
 
@@ -231,7 +231,7 @@ export default class ProductController {
             }
         });
 
-        if (productCart) throw new BadRequestException('product is already added')
+        if (productCart) throw new BadRequestException('Product is already added')
 
         await prisma.productCart.create({
             data: {
@@ -286,7 +286,7 @@ export default class ProductController {
                 ProductImages: true
             }
         });
-        if (!product) throw new NotFoundException('product not found');
+        if (!product) throw new NotFoundException('Product not found');
 
         return product;
     }
@@ -302,7 +302,7 @@ export default class ProductController {
                 id: reactionTypeId
             }
         });
-        if (!reactionType) throw new NotFoundException('reaction type not found')
+        if (!reactionType) throw new NotFoundException('Reaction type not found')
 
         let reaction = await prisma.reaction.findFirst({
             where: {

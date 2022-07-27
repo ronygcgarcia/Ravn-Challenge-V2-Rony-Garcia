@@ -26,18 +26,26 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Wrong body request: 
+                value:
+                  message: Wrong body request
+                  fields:
+                    message: "property is required"
+                    field: property
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '403':
-        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access. 
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
+              Invalid credentials: 
+                value:
+                  message: Invalid credentials
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -50,24 +58,16 @@
     responses:
       '200':
         description: Token and refresh token to access the system
-      '400':
-        description: Bad Request. The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '403':
-        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -108,18 +108,16 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '401':
-        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '403':
-        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
+            examples:  
+              Wrong body request: 
+                value:
+                  message: Wrong body request
+                  fields:
+                    message: "property is required"
+                    field: property
+              email taken: 
+                value:
+                  message: This email has been taken
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -152,18 +150,20 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Token not valid: 
+                value:
+                  message: Token not valid
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '403':
-        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -199,18 +199,13 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '401':
-        description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
-      '403':
-        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
+            examples:  
+              Wrong body request: 
+                value:
+                  message: Wrong body request
+                  fields:
+                    message: "property is required"
+                    field: property
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null
@@ -248,18 +243,23 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
+            examples:  
+              Wrong body request: 
+                value:
+                  message: Wrong body request
+                  fields:
+                    message: "property is required"
+                    field: property
       '401':
         description: Unauthorized. Since the visitor failed to provide valid credentials, access has been denied, and the error page has been loaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-      '403':
-        description: Not Found. This error occurs when you try to access a page or network resource that you do not have a permission to access.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Error'
+            examples:  
+              Unauthorized: 
+                value:
+                  message: Unauthorized
       '500':
         description: Internal Server Error. This happen when the network resource you are addressing encountered a problem and the server can not respond.
         content: null

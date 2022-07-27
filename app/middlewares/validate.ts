@@ -10,7 +10,11 @@ function validation(schema: Joi.ObjectSchema) {
             convert: false,
         });
         if (error) {
-            return res.status(HttpCode.HTTP_BAD_REQUEST).json(error.details);
+            const fields = error.details.map((detail) => ({ message: detail.message, field: detail?.path[0]}));
+            return res.status(HttpCode.HTTP_BAD_REQUEST).json({
+                message: 'Wrong body request',
+                fields
+            });
         }
         next();
     }

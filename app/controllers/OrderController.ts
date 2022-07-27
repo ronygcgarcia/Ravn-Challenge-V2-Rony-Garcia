@@ -137,7 +137,7 @@ export default class OrderController {
                 }
             }
         });
-        if (!order) throw new NotFoundException('order not found');
+        if (!order) throw new NotFoundException('Order not found');
 
         return order;
     }
