@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 export default class Mailer {
     static async sendEmail(params: IMail): Promise<void> {
         const {
-            email, header = [], subject, message, body = [],
+            email, header = [], subject, message, body = [], image = 'https://i.ibb.co/bX93g69/banner.jpg'
         } = params;
         const { html } = mjml2html({
             tagName: 'mjml',
@@ -35,7 +35,7 @@ export default class Mailer {
                                         {
                                             tagName: 'mj-image',
                                             attributes: {
-                                                src: 'https://i.ibb.co/bX93g69/banner.jpg',
+                                                src: image,
                                                 width: '350px',
                                             },
                                         },
@@ -79,6 +79,6 @@ export default class Mailer {
             html,
         };
 
-        // await transporter.sendMail(mailConfig);
+        await transporter.sendMail(mailConfig);
     }
 }

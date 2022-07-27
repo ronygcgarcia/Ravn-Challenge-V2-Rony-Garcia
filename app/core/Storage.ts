@@ -54,7 +54,7 @@ export default class Storage {
         if (!diskToRead) throw new LogicalException('ERR_INVALID_DISK', 'disk is not defined');
         const pathToSearch = `${diskToRead.path}/${fileName}`;
 
-        if (!fs.existsSync(`./storage/${pathToSearch}`)) throw new NotFoundException('ERR_FILE_NOT_FOUND', 'file not found');
+        if (!fs.existsSync(`./storage/${pathToSearch}`)) throw new NotFoundException('file not found');
         const buffer = await fs.readFileSync(`./storage/${pathToSearch}`);
 
         const file = {

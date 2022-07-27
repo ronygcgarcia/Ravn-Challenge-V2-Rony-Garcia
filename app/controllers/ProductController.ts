@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import HttpCode from '../../configs/httpCode';
@@ -6,8 +5,8 @@ import BadRequestException from '../../handlers/BadRequestException';
 import NotFoundException from '../../handlers/NotFoundException';
 import Storage from '../core/Storage';
 import ValidateParams from '../utils/ValidateParams';
-
-const prisma = new PrismaClient();
+import sendEmailQueue from '../../jobs/queues/email.queue';
+import prisma from '../db/client';
 
 export default class ProductController {
     static async index(req: Request, res: Response) {
@@ -330,6 +329,34 @@ export default class ProductController {
             }
         });
 
+        const product = await prisma.product.findUnique({
+            where: {
+                id: Number(productId)
+            },
+            include:{
+                ProductImages: true
+            }
+        });
+
+        const order = await prisma.order.findFirst({
+            where: {
+                user_id: req.user.id,
+                status_id: 1
+            },
+            include: {
+                OrderDetail:{
+                    where: {
+                        product_id: Number(productId)
+                    }
+                }
+            }
+        });
+
+        if(Number(product?.quantity) <= 3 && order){
+            const imageId = product?.ProductImages.length ? `${process.env.HOST}:${process.env.PORT}/api/v1/${product.ProductImages[0].id}/image`  : undefined;
+            ProductController.emailNotificacion(req.user.email, imageId);
+        }
+
         return res.status(HttpCode.HTTP_OK).send();
     }
 
@@ -347,5 +374,38 @@ export default class ProductController {
 
         res.setHeader('Content-Type', 'image/*');
         return res.status(HttpCode.HTTP_OK).send(file.data);
+    }
+
+    static async emailNotificacion(email: string, image: string | undefined) {
+        const data ={
+            header: [
+                {
+                    tagName: 'mj-button',
+                    attributes: {
+                        width: '80%',
+                        padding: '5px 10px',
+                        'font-size': '20px',
+                        'background-color': '#d58737',
+                        'border-radius': '99px',
+                    },
+                    content: `Hello ${email}`,
+                },
+            ],
+    
+            body: [
+                {
+                    tagName: 'mj-button',
+                    attributes: {
+                        width: '80%',
+                        padding: '5px 10px',
+                        'font-size': '20px',
+                        'background-color': '#d58737',
+                    },
+                    content: 'hurry up, it\'s going to be sell-out',
+                },
+            ],
+            image
+        }
+        await sendEmailQueue(data);
     }
 }
