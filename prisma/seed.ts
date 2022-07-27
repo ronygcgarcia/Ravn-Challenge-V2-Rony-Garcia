@@ -17,6 +17,7 @@ import IRole from "../app/interfaces/IRole";
 import IProfileRole from "../app/interfaces/IProfileRole";
 import IUserProfile from "../app/interfaces/IUserProfile";
 import ICatalog from "../app/interfaces/ICatalog";
+import moment from "moment";
 
 const prisma = new PrismaClient()
 
@@ -68,6 +69,55 @@ async function main() {
             data: reactionType as ICatalog
         });
     }
+
+    await prisma.product.create({
+        data: {
+            id: 10001,
+            name: "product",
+            price: 10.0,
+            quantity: 50,
+            category_id: 1,
+            ProductImages: {
+                create: {
+                    id: 10001,
+                    path: '05564afa81b355e81e9adeaf3a1dc116.jpg'
+                }
+            }
+        }
+    });
+
+    const cart = await prisma.cart.create({
+        data: {
+            id: 10001,
+            user_id: 10003,
+        }
+    });
+
+    await prisma.productCart.create({
+        data: {
+            id: 10001,
+            cart_id: cart.id,
+            product_id: 10001,
+            quantity: 10
+        }
+    });
+
+    await prisma.order.create({
+        data: {
+            id: 10001,
+            order_date: moment().format(),
+            total: 100,
+            user_id: 10001,
+            address: 'address',
+            phone: '77889900',
+            OrderDetail: {
+                create: {
+                    product_id: 10001,
+                    quantity: 10
+                },
+            }
+        }
+    });
 }
 
 main().catch(e => {

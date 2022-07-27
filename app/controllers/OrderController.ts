@@ -88,8 +88,7 @@ export default class OrderController {
                 }
             }
         });
-        if (!cart) throw new NotFoundException('cart not found');
-        if(!cart?.ProductCart.length) throw new BadRequestException('The cart is empty');
+        if (!cart || !cart?.ProductCart.length) throw new BadRequestException('The cart is empty');
         const total = cart?.ProductCart.reduce((acumulator: number, value: IProductCart) => acumulator + value.product.price * value.quantity, 0);
         const orderDetails = cart?.ProductCart.map((detail) => ({
             product_id: detail.product_id,
@@ -150,7 +149,7 @@ export default class OrderController {
 
         const order = await OrderController.orderExist(Number(orderId), req.user.id);
 
-        for(const product of order.OrderDetail){
+        for (const product of order.OrderDetail) {
             await prisma.product.update({
                 where: {
                     id: product.product_id
@@ -160,7 +159,7 @@ export default class OrderController {
                 }
             });
         }
-        
+
         await prisma.order.update({
             where: {
                 id: order.id
