@@ -126,7 +126,7 @@ describe('Upload an image', () => {
     });
 });
 
-let productImage: number = 10001;
+const productImage = 10001;
 describe('Detail product', () => {
     it('Should return status code 200 and detail product', async () => {
         const response = await request(url).get(`/api/v1/products/${productId}`);
@@ -139,7 +139,7 @@ describe('Detail product', () => {
 describe('Getting product image', () => {
     it('Should return status code 200 and a success message', async () => {
         const response = await request(url).get(`/api/v1/products/${productImage}/image`);
-        
+
         expect(response.statusCode).toBe(200);
     });
 });

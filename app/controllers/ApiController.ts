@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import moment from 'moment';
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
@@ -12,8 +11,7 @@ import Token from '../interfaces/IToken';
 import User from '../interfaces/IUser';
 import UnprocessableEntityException from '../../handlers/UnprocessableEntityException';
 import NotFoundException from '../../handlers/NotFoundException';
-
-const prisma = new PrismaClient();
+import prisma from '../db/client';
 
 export default class ApiController {
     static async login(req: Request, res: Response) {

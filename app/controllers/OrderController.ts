@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import moment from 'moment';
 import HttpCode from '../../configs/httpCode';
@@ -9,8 +8,7 @@ import NotFoundException from '../../handlers/NotFoundException';
 import IProductCart from '../interfaces/IProductCart';
 import Security from '../services/Security';
 import ValidateParams from '../utils/ValidateParams';
-
-const prisma = new PrismaClient();
+import prisma from '../db/client';
 
 export default class OrderController {
     static async index(req: Request, res: Response) {

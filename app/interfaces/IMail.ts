@@ -4,5 +4,6 @@ export default interface IMail {
     subject: string,
     message: string,
     body?: any[],
+    image?: string
 }
 
