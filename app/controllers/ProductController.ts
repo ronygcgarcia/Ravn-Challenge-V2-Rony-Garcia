@@ -12,8 +12,17 @@ export default class ProductController {
     static async index(req: Request, res: Response) {
         const { page = 1, per_page: perPage = 10, pagination = 'true', category_id: categoryId } = req.query;
         const filter: {
-            category_id?: number
-        } = {};
+            category_id?: number,
+            quantity: {
+                gt: number
+            },
+            active: boolean
+        } = {
+            quantity: {
+                gt: 0
+            },
+            active: true
+        };
         const paginationOptions: {
             take?: number,
             skip?: number
