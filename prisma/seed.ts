@@ -2,6 +2,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { PrismaClient } from "@prisma/client";
+import moment from "moment";
 import users from "./user";
 import profiles from "./profiles";
 import roles from "./roles";
@@ -17,7 +18,6 @@ import IRole from "../app/interfaces/IRole";
 import IProfileRole from "../app/interfaces/IProfileRole";
 import IUserProfile from "../app/interfaces/IUserProfile";
 import ICatalog from "../app/interfaces/ICatalog";
-import moment from "moment";
 
 const prisma = new PrismaClient()
 

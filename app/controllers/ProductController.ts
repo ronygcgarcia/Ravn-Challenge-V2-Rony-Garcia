@@ -76,7 +76,7 @@ export default class ProductController {
                 id: Number(categoryId)
             },
         });
-        if (!category) throw new BadRequestException('category not found');
+        if (!category) throw new NotFoundException('Category not found');
 
         const product = await prisma.product.create({
             data: {
@@ -102,7 +102,7 @@ export default class ProductController {
                     id: Number(categoryId)
                 },
             });
-            if (!category) throw new NotFoundException('category not found');
+            if (!category) throw new NotFoundException('Category not found');
         }
 
         await ProductController.productExist(Number(productId))
@@ -131,7 +131,7 @@ export default class ProductController {
 
     static async delete(req: Request, res: Response) {
         const { product_id: productId } = req.params;
-        
+
         await ValidateParams.isValid(productId, 'The parameter must be a number');
         await ProductController.productExist(Number(productId));
 
@@ -141,7 +141,7 @@ export default class ProductController {
             }
         });
 
-        if(orderDetail) throw new BadRequestException('Is not possible to delete this product, because it´s associated to an order');
+        if (orderDetail) throw new BadRequestException('Is not possible to delete this product, because it´s associated to an order');
 
         await prisma.product.delete({
             where: {
@@ -178,7 +178,7 @@ export default class ProductController {
     static async uploadImage(req: Request, res: Response) {
         const { product_id: productId } = req.params;
         const picture = req.files?.picture as UploadedFile;
-        if (!picture) throw new BadRequestException('picture is required')
+        if (!picture) throw new BadRequestException('Picture is required')
         await ValidateParams.isValid(productId, 'The parameter must be a number');
         await ProductController.productExist(Number(productId))
 
@@ -208,8 +208,8 @@ export default class ProductController {
     static async addCart(req: Request, res: Response) {
         const { product_id: productId, quantity } = req.body;
         const product = await ProductController.productExist(productId);
-        if(quantity > product.quantity) throw new BadRequestException(`Cannot add more than ${product.quantity}`);
-        
+        if (quantity > product.quantity) throw new BadRequestException(`Cannot add more than ${product.quantity}`);
+
         let cart = await prisma.cart.findFirst({
             where: {
                 user_id: req.user.id
@@ -231,7 +231,7 @@ export default class ProductController {
             }
         });
 
-        if (productCart) throw new BadRequestException('product is already added')
+        if (productCart) throw new BadRequestException('Product is already added')
 
         await prisma.productCart.create({
             data: {
@@ -278,6 +278,7 @@ export default class ProductController {
     }
 
     static async productExist(productId: number) {
+        if(Number.isNaN(productId)) throw new NotFoundException('Product not found');
         const product = await prisma.product.findUnique({
             where: {
                 id: Number(productId)
@@ -286,7 +287,7 @@ export default class ProductController {
                 ProductImages: true
             }
         });
-        if (!product) throw new NotFoundException('product not found');
+        if (!product) throw new NotFoundException('Product not found');
 
         return product;
     }
@@ -302,7 +303,7 @@ export default class ProductController {
                 id: reactionTypeId
             }
         });
-        if (!reactionType) throw new NotFoundException('reaction type not found')
+        if (!reactionType) throw new NotFoundException('Reaction type not found')
 
         let reaction = await prisma.reaction.findFirst({
             where: {
@@ -333,7 +334,7 @@ export default class ProductController {
             where: {
                 id: Number(productId)
             },
-            include:{
+            include: {
                 ProductImages: true
             }
         });
@@ -344,7 +345,7 @@ export default class ProductController {
                 status_id: 1
             },
             include: {
-                OrderDetail:{
+                OrderDetail: {
                     where: {
                         product_id: Number(productId)
                     }
@@ -352,9 +353,9 @@ export default class ProductController {
             }
         });
 
-        if(Number(product?.quantity) <= 3 && order){
-            const imageId = product?.ProductImages.length ? `${process.env.HOST}:${process.env.PORT}/api/v1/${product.ProductImages[0].id}/image`  : undefined;
-            ProductController.emailNotificacion(req.user.email, imageId);
+        if (Number(product?.quantity) <= 3 && order) {
+            const imageId = product?.ProductImages.length ? `${process.env.HOST}:${process.env.PORT}/api/v1/${product.ProductImages[0].id}/image` : undefined;
+            ProductController.emailNotificacion(req.user.email, 'Almost sold out', 'Hurry up', imageId);
         }
 
         return res.status(HttpCode.HTTP_OK).send();
@@ -376,8 +377,10 @@ export default class ProductController {
         return res.status(HttpCode.HTTP_OK).send(file.data);
     }
 
-    static async emailNotificacion(email: string, image: string | undefined) {
-        const data ={
+    static async emailNotificacion(email: string, subject: string, message: string, image: string | undefined) {
+        const data = {
+            email,
+            subject,
             header: [
                 {
                     tagName: 'mj-button',
@@ -391,7 +394,7 @@ export default class ProductController {
                     content: `Hello ${email}`,
                 },
             ],
-    
+            message,
             body: [
                 {
                     tagName: 'mj-button',
@@ -404,7 +407,7 @@ export default class ProductController {
                     content: 'hurry up, it\'s going to be sell-out',
                 },
             ],
-            image
+            image,
         }
         await sendEmailQueue(data);
     }
