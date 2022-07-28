@@ -4,7 +4,7 @@ const userProfiles = [
         user_id: 10001
     },
     {
-        profile_id: 2,
+        profile_id: 1,
         user_id: 10002
     },
     {

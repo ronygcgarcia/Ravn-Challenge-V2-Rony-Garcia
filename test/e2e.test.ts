@@ -9,14 +9,14 @@ let token: string;
 describe('Login endpoint', () => {
     it('Should return status code 200 with token and refresh token', async () => {
         const response = await request(url).post('/api/v1/login').send({
-            email: 'ronygcgarcia@gmail.com',
+            email: 'ronyacxel503@gmail.com',
             password: 'admin'
         });
 
         expect(response.statusCode).toBe(200);
         expect(Object.keys(response.body).sort()).toEqual(['token', 'refresh_token'].sort());
         token = response.body.token;
-    })
+        })
 });
 
 describe('Try to logout when is not logged', () => {
@@ -169,7 +169,6 @@ describe('Adding reaction to a product', () => {
             .set({
                 Authorization: clientToken
             });
-
         expect(response.statusCode).toBe(200);
     });
 });
@@ -180,7 +179,6 @@ describe('Removing a product from cart', () => {
             .set({
                 Authorization: clientToken
             });
-
         expect(response.statusCode).toBe(200);
         expect(response.body).toMatchObject({
             message: 'Product was removed'
@@ -227,7 +225,6 @@ describe('Show order details', () => {
         const response = await request(url).get(`/api/v1/orders/${order}`).set({
             Authorization: clientToken
         });
-
         expect(response.statusCode).toBe(200);
     });
 });
