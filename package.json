@@ -1,6 +1,9 @@
 {
     "name": "ravn-challenge",
     "version": "1.0.0",
+    "engines": {
+        "node": "14.17.6"
+    },
     "description": "Ravn challenge",
     "main": "./index.ts",
     "scripts": {
@@ -8,6 +11,7 @@
         "migrate:reset": "npx prisma migrate reset -f",
         "test": "npm run migrate:reset && dotenv -e .env.test jest -i",
         "start": "node dist/index.js",
+        "postinstall": "tsc",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
         "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml"
     },
