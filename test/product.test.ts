@@ -27,7 +27,7 @@ describe('Product details /api/v1/products/:product_id [GET] > wrong product_id'
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });
@@ -136,7 +136,7 @@ describe('Updating product /api/v1/products/:product_id [PUT] > wrong product id
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });
@@ -156,7 +156,7 @@ describe('Updating product /api/v1/products/:product_id [PUT] > wrong category i
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'category not found'
+            message: 'Category not found'
         });
     });
 });
@@ -247,7 +247,7 @@ describe('Disable product /api/v1/products/:product_id [PATCH]', () => {
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });
@@ -277,7 +277,7 @@ describe('Uploading product image /api/v1/products/:product_id/image > image not
 
         expect(response.statusCode).toBe(400);
         expect(response.body).toMatchObject({
-            message: 'picture is required'
+            message: 'Picture is required'
         });
     });
 });
@@ -327,7 +327,7 @@ describe('Adding product to a cart /api/v1/products/cart [POST] > wrong product 
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });
@@ -361,7 +361,7 @@ describe('Adding product to a cart /api/v1/products/cart [POST] > product alread
 
         expect(response.statusCode).toBe(400);
         expect(response.body).toMatchObject({
-            message: 'product is already added'
+            message: 'Product is already added'
         });
     });
 });
@@ -389,7 +389,7 @@ describe('Removing product to a cart /api/v1/products/:product_id/cart [DELETE] 
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });
@@ -434,7 +434,7 @@ describe('Adding reaction to a product /api/v1/products/:product_id/reaction [PO
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'reaction type not found'
+            message: 'Reaction type not found'
         });
     });
 });
@@ -451,7 +451,7 @@ describe('Adding reaction to a product /api/v1/products/:product_id/reaction [PO
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });
@@ -484,7 +484,7 @@ describe('Deleting product /api/v1/products/:product_id [DELETE] > wrong product
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'product not found'
+            message: 'Product not found'
         });
     });
 });

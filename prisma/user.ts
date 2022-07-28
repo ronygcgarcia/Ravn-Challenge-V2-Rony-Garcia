@@ -1,9 +1,12 @@
+import moment from "moment";
+
 const users = [
     {
         id: 10001,
         email: 'ronygcgarcia@gmail.com',
         password: '$2a$12$MhjYzaIFCNFEmY.iba/fK.i/XHRCOpSbobnO/jJifxh7DrodgaJaq',
         is_suspended: false,
+        token_valid_after: moment().format(),
         verified: true
     },
     {
@@ -11,6 +14,7 @@ const users = [
         email: 'ronyacxel503@gmail.com',
         password: '$2a$12$MhjYzaIFCNFEmY.iba/fK.i/XHRCOpSbobnO/jJifxh7DrodgaJaq',
         is_suspended: false,
+        token_valid_after: moment().format(),
         verified: true
     },
     {
@@ -18,6 +22,7 @@ const users = [
         email: 'ravn-challenge-v2@gmail.com',
         password: '$2a$12$MhjYzaIFCNFEmY.iba/fK.i/XHRCOpSbobnO/jJifxh7DrodgaJaq',
         is_suspended: false,
+        token_valid_after: moment().format(),
         verified: true
     }
 ];

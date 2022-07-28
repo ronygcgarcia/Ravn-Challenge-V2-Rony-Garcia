@@ -58,7 +58,7 @@ describe('Order detail /api/v1/orders/:order_id [GET]', () => {
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'order not found'
+            message: 'Order not found'
         });
     });
 });
@@ -121,7 +121,7 @@ describe('Creates an order /api/v1/orders/:order_id/payment > wrong order id', (
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
-            message: 'order not found'
+            message: 'Order not found'
         });
     });
 });

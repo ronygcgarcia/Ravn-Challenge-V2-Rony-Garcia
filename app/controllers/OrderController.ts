@@ -115,6 +115,7 @@ export default class OrderController {
     }
 
     static async orderExist(orderId: number, userId: number) {
+        if(Number.isNaN(orderId)) throw new NotFoundException('Product not found');
         const filter: {
             id: number,
             user_id?: number
@@ -137,7 +138,7 @@ export default class OrderController {
                 }
             }
         });
-        if (!order) throw new NotFoundException('order not found');
+        if (!order) throw new NotFoundException('Order not found');
 
         return order;
     }
