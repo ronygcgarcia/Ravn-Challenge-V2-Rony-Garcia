@@ -287,7 +287,7 @@ export default class ProductController {
     }
 
     static async productExist(productId: number) {
-        if(Number.isNaN(productId)) throw new NotFoundException('Product not found');
+        if (Number.isNaN(productId)) throw new NotFoundException('Product not found');
         const product = await prisma.product.findUnique({
             where: {
                 id: Number(productId)
@@ -372,7 +372,7 @@ export default class ProductController {
 
     static async getImage(req: Request, res: Response) {
         const { product_image_id: productImageId } = req.params;
-
+        await ValidateParams.isValid(productImageId);
         const image = await prisma.productImages.findUnique({
             where: {
                 id: Number(productImageId)

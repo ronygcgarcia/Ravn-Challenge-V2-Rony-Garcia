@@ -7,6 +7,7 @@ import productCreateSchema from '../../app/schemas/productCreateSchema';
 import productUpdateSchema from '../../app/schemas/productUpdateSchema';
 import productSetStatusSchema from '../../app/schemas/productSetStatusSchema';
 import addCartSchema from '../../app/schemas/addCartSchema';
+import reactionAddSchema from '../../app/schemas/reactionAddSchema';
 import validateRole from '../../app/middlewares/validateRole';
 
 const router = Router();
@@ -19,7 +20,7 @@ router.patch('/:product_id', [auth, validation(productSetStatusSchema), validate
 router.put('/:product_id/image', [auth, validateRole('ROLE_CREATE_PRODUCT_IMAGES')], Call(ProductController.uploadImage));
 router.post('/cart', [auth, validation(addCartSchema), validateRole('ROLE_ADD_CART_PRODUCT')], Call(ProductController.addCart));
 router.delete('/:product_id/cart', [auth, validateRole('ROLE_REMOVE_CART_PRODUCT')], Call(ProductController.removeCart));
-router.post('/:product_id/reaction', [auth, validateRole('ROLE_CREATE_REACTION_PRODUCT')], Call(ProductController.setReaction));
+router.post('/:product_id/reaction', [auth, validation(reactionAddSchema), validateRole('ROLE_CREATE_REACTION_PRODUCT')], Call(ProductController.setReaction));
 
 router.get('/:product_image_id/image', Call(ProductController.getImage));
 
