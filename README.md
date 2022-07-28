@@ -15,6 +15,26 @@ in the root of the project, and set your credentials.
 cp .env.example .env
 ```
 
+### Enviroment variables
+| Variables| Descripción|  
+| ----------- | -----------|
+|SYSTEM_NAME                             |The system name tha will display in emails
+|HOST 	                                 |Host used to run the application.
+|PORT                                    |Port used to run the application.
+|APP_ENV                                 |App enviroment.
+|SECRET_KEY                              |Secret key to issue token.
+|APP_DEBUG                               |Flag to activate stack when an error occurs.
+|JWT_EXPIRATION_TIME                     |Expiration time of JWT. 
+|REFRESH_EXPIRATION_TYPE                 |Measure unit of expiration time of refresh token.
+|REFRESH_EXPIRATION_TIME                 |Time of expiration time of refresh token.
+|MAIL_HOST                               |Host email service. 
+|MAIL_PORT                               |Port email service.
+|MAIL_USER                               |User of email service.
+|MAIL_PASS                               |Password of email service.
+|MAIL_MESSAGE_HOST                       |Host used to generate emails.
+|MAX_PIC_PRODUCTS                        |Max quantity picture allow to upload per product.
+|USER_VERIFIED                           |Flag to verify users automatically.
+
 Use the node module manager npm to install dependencies.
 
 ```bash
@@ -72,27 +92,6 @@ To seed the database, run the db seed CLI command
 ```bash
 npm run seed
 ``` 
-
-### Enviroment variables
-| Variables| Descripción|  
-| ----------- | -----------|
-|SYSTEM_NAME                             |The system name tha will display in emails
-|HOST 	                                 |Host used to run the application.
-|PORT                                    |Port used to run the application.
-|APP_ENV                                 |App enviroment.
-|SECRET_KEY                              |Secret key to issue token.
-|APP_DEBUG                               |Flag to activate stack when an error occurs.
-|JWT_EXPIRATION_TIME                     |Expiration time of JWT. 
-|REFRESH_EXPIRATION_TYPE                 |Measure unit of expiration time of refresh token.
-|REFRESH_EXPIRATION_TIME                 |Time of expiration time of refresh token.
-|MAIL_HOST                               |Host email service. 
-|MAIL_PORT                               |Port email service.
-|MAIL_USER                               |User of email service.
-|MAIL_PASS                               |Password of email service.
-|MAIL_MESSAGE_HOST                       |Host used to generate emails.
-|MAX_PIC_PRODUCTS                        |Max quantity picture allow to upload per product.
-|USER_VERIFIED                           |Flag to verify users automatically.
-
 ## Testing
 To run tests locally you should run the following commands, note: this commands will reset and seed your development.
 
