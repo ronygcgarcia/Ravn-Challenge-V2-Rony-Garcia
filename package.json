@@ -7,13 +7,18 @@
     "description": "Ravn challenge",
     "main": "./index.ts",
     "scripts": {
-        "build": "npx tsc",
+        "migrate:dev": "npx prisma migrate dev",
+        "migrate:deploy": "npx prisma migrate deploy",
         "migrate:reset": "npx prisma migrate reset -f",
-        "test": "npm run migrate:reset && dotenv -e .env.test jest -i",
+        "seed": "npx prisma db seed",
+        "build": "npx tsc",
         "start": "node dist/index.js",
-        "postinstall": "tsc && npm run swagger",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-        "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml"
+        "test": "npm run migrate:reset && jest auth.test.ts order.test.ts product.test.ts",
+        "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml",
+        "test:e2e": "npm run migrate:reset && jest e2e.test.ts",
+        "test:coverage": "npm run migrate:reset && jest auth.test.ts order.test.ts product.test.ts --coverage",
+        "postinstall": "tsc && npm run swagger"
     },
     "prisma": {
         "seed": "node --loader ts-node/esm prisma/seed.ts"
