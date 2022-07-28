@@ -3,19 +3,14 @@
     parameters:
     - in: query
       name: page
-      required: true
+      required: false
       type: integer
       description: number page
     - in: query
       name: per_page
-      required: true
+      required: false
       type: integer
-      description: quantity per 
-    - in: query
-      name: page
-      required: true
-      type: integer
-      description: number page
+      description: quantity per page
     - in: query
       name: pagination
       required: false
@@ -23,7 +18,7 @@
       description: Parameter to deactivate pagination
     - in: query
       name: user_id
-      required: true
+      required: false
       type: integer
       description: Parameter to filter by if when the logged user is manager
     tags:
