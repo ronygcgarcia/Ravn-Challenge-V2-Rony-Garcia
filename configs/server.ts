@@ -33,7 +33,7 @@ class MainServer {
   }
 
   start() {
-    this.server.listen(this.port, this.host, () => {
+    this.server.listen(this.port, () => {
       console.log(`http://${this.host}:${this.port}`);
     });
   }

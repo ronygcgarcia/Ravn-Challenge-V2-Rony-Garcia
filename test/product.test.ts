@@ -23,7 +23,7 @@ describe('Product details /api/v1/products/:product_id [GET]', () => {
 
 describe('Product details /api/v1/products/:product_id [GET] > wrong product_id', () => {
     it('Should return status code 404 not found exception', async () => {
-        const response = await request(url).get('/api/v1/products/10002');
+        const response = await request(url).get('/api/v1/products/10000');
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toMatchObject({
@@ -129,7 +129,7 @@ describe('Updating product /api/v1/products/:product_id [PUT] > wrong body', () 
 
 describe('Updating product /api/v1/products/:product_id [PUT] > wrong product id', () => {
     it('Should return status code 404 and error message', async () => {
-        const response = await request(url).put(`/api/v1/products/10002`)
+        const response = await request(url).put(`/api/v1/products/10000`)
             .set({
                 Authorization: token,
             });
@@ -237,7 +237,7 @@ describe('Disable product /api/v1/products/:product_id [PATCH]', () => {
 
 describe('Disable product /api/v1/products/:product_id [PATCH]', () => {
     it('Should return status code 404 and error message', async () => {
-        const response = await request(url).patch(`/api/v1/products/10002`)
+        const response = await request(url).patch(`/api/v1/products/10000`)
             .set({
                 Authorization: token,
             })
@@ -382,7 +382,7 @@ describe('Removing product to a cart /api/v1/products/:product_id/cart [DELETE]'
 
 describe('Removing product to a cart /api/v1/products/:product_id/cart [DELETE] > wrong product id', () => {
     it('Should return status code 404 and error message', async () => {
-        const response = await request(url).delete(`/api/v1/products/10002/cart`)
+        const response = await request(url).delete(`/api/v1/products/10000/cart`)
             .set({
                 Authorization: token
             });
@@ -441,7 +441,7 @@ describe('Adding reaction to a product /api/v1/products/:product_id/reaction [PO
 
 describe('Adding reaction to a product /api/v1/products/:product_id/reaction [POST] > Product not found', () => {
     it('Should return status code 404 and error message', async () => {
-        const response = await request(url).post(`/api/v1/products/10002/reaction`)
+        const response = await request(url).post(`/api/v1/products/10000/reaction`)
             .set({
                 Authorization: token
             })
@@ -477,7 +477,7 @@ describe('Getting prodcut image /api/v1/products/:product_image_id/image [GET] >
 
 describe('Deleting product /api/v1/products/:product_id [DELETE] > wrong product id', () => {
     it('Should return status code 404 and error message', async () => {
-        const response = await request(url).delete(`/api/v1/products/10002`)
+        const response = await request(url).delete(`/api/v1/products/10000`)
             .set({
                 Authorization: token,
             });

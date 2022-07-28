@@ -7,10 +7,13 @@ export default class Handler {
         let message = 'Has been ocurred an error';
         if (err.statusCode) message = err.description;
         if (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError') return res.status(HttpCode.HTTP_UNAUTHORIZED).json({ message: 'Unauthorized' })
-
-        return res.status(err.statusCode || HttpCode.HTTP_INTERNAL_SERVER_ERROR).json({
-            message,
-            stack: err.stack
-        });
+        const response: {
+            message: string,
+            stack?: string
+        } = {
+            message
+        }
+        if(process.env.APP_DEBUG === 'true') response.stack = err.stack;
+        return res.status(err.statusCode || HttpCode.HTTP_INTERNAL_SERVER_ERROR).json(response);
     }
 }

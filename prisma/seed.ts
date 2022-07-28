@@ -18,6 +18,7 @@ import IRole from "../app/interfaces/IRole";
 import IProfileRole from "../app/interfaces/IProfileRole";
 import IUserProfile from "../app/interfaces/IUserProfile";
 import ICatalog from "../app/interfaces/ICatalog";
+import products from "./products";
 
 const prisma = new PrismaClient()
 
@@ -70,11 +71,17 @@ async function main() {
         });
     }
 
+    for (const product of products) {
+        await prisma.product.createMany({
+            data: product
+        });
+    }
+
     await prisma.product.create({
         data: {
             id: 10001,
-            name: "product",
-            price: 10.0,
+            name: "Shortbread",
+            price: 2.5,
             quantity: 50,
             category_id: 1,
             ProductImages: {
