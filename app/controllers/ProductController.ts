@@ -363,8 +363,11 @@ export default class ProductController {
         });
 
         if (Number(product?.quantity) <= 3 && order) {
-            const imageId = product?.ProductImages.length ? `${process.env.HOST}:${process.env.PORT}/api/v1/${product.ProductImages[0].id}/image` : undefined;
-            ProductController.emailNotificacion(req.user.email, 'Almost sold out', 'Hurry up', imageId);
+            let buffer;
+            if(product?.ProductImages.length){
+                buffer = await Storage.getFile(product.ProductImages[0].path, 'products');
+            }
+            ProductController.emailNotificacion(req.user.email, 'Almost sold out', 'Hurry up, it\'s going to be sell-out', buffer?.path, buffer?.data);
         }
 
         return res.status(HttpCode.HTTP_OK).send();
@@ -386,7 +389,7 @@ export default class ProductController {
         return res.status(HttpCode.HTTP_OK).send(file.data);
     }
 
-    static async emailNotificacion(email: string, subject: string, message: string, image: string | undefined) {
+    static async emailNotificacion(email: string, subject: string, message: string, filename: string | undefined, buffer: Buffer | undefined) {
         const data = {
             email,
             subject,
@@ -413,10 +416,11 @@ export default class ProductController {
                         'font-size': '20px',
                         'background-color': '#d58737',
                     },
-                    content: 'hurry up, it\'s going to be sell-out',
+                    content: 'Hurry up',
                 },
             ],
-            image,
+            filename,
+            buffer,
         }
         await sendEmailQueue(data);
     }

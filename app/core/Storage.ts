@@ -55,10 +55,10 @@ export default class Storage {
         const pathToSearch = `${diskToRead.path}/${fileName}`;
 
         if (!fs.existsSync(`./storage/${pathToSearch}`)) throw new NotFoundException('file not found');
-        const buffer = await fs.readFileSync(`./storage/${pathToSearch}`);
+        const buffer = await fs.readFileSync(`./storage/${diskToRead.path}/${fileName}`);
 
         const file = {
-            path: pathToSearch,
+            path: fileName,
             data: buffer as Buffer,
         };
 
