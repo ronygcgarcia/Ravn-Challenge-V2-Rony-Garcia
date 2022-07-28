@@ -2,11 +2,6 @@
 
 Snack store
 
-## System limit
-The system will manage product stock only, it won´to manage dynamic limits for different sellers. 
-
-Delivery of product is out of the system scope.
-
 ## Pre-requisites
 - Node v14.17.6
 - PostgreSQL 14
@@ -110,3 +105,8 @@ npm run test:coverage
 ```bash
 npm run test:e2e
 ``` 
+
+## System limit
+The system will manage product stock only, it won´t manage dynamic limits for different sellers. 
+
+Delivery of product is out of the system scope.
