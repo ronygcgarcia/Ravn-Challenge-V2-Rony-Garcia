@@ -10,7 +10,7 @@
         "build": "npx tsc",
         "migrate:reset": "npx prisma migrate reset -f",
         "test": "npm run migrate:reset && dotenv -e .env.test jest -i",
-        "start": "npm run swagger && node dist/index.js",
+        "start": "node dist/index.js",
         "postinstall": "tsc",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
         "swagger": "yamlinc -o ./app/docs/index.yaml ./app/docs/swagger/include.yaml && yamlinc -o ./dist/app/docs/index.yaml ./app/docs/swagger/include.yaml"
