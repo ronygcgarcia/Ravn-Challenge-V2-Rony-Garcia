@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const reactionAddSchema: Joi.ObjectSchema = Joi.object({
-    reactionTypeId: Joi.number()
+    reaction_type_id: Joi.number()
         .required()
 });
 
