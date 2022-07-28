@@ -3,6 +3,7 @@ import web from './routes/web';
 import MainServer from './configs/server';
 import swagger from './routes/swagger';
 import Handler from './handlers/Handler';
+import NotFoundException from './handlers/NotFoundException';
 
 export default class Main {
   server: MainServer;
@@ -18,6 +19,9 @@ export default class Main {
     this.server.app.use('/', web);
     this.server.app.use('/api', api);
     this.server.app.use('/docs', swagger);
+    this.server.app.all('*', () => {
+      throw new NotFoundException();
+  });
   }
 
   ExceptionConfig() {
