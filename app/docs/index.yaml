@@ -956,13 +956,7 @@ paths:
           content: null
       x-codegen-request-body-name: body
     area: api
-  '/api/v1/products/{product_id}/cart':
-    parameters:
-      - in: path
-        name: product_id
-        required: true
-        type: integer
-        description: product id
+  /api/v1/products/cart:
     post:
       tags:
         - products
@@ -974,8 +968,10 @@ paths:
               properties:
                 product_id:
                   type: integer
+                  required: true
                 quantity:
                   type: integer
+                  required: true
         required: true
       responses:
         '200':
@@ -1041,6 +1037,13 @@ paths:
           content: null
       x-codegen-request-body-name: body
       area: api
+  '/api/v1/products/{product_id}/cart':
+    parameters:
+      - in: path
+        name: product_id
+        required: true
+        type: integer
+        description: product id
     delete:
       tags:
         - products
